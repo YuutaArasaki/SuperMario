@@ -9,6 +9,6 @@ protected:
 	bool on_ground;
 
 public:
-	virtual void OnHitCollision(GameObject*) override;
+	virtual void OnHitCollision(GameObject* hit_object) override;
 
 };

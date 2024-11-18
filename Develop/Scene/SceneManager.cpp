@@ -5,7 +5,7 @@
 
 SceneManager::SceneManager() : current_scene(nullptr)
 {
-
+	
 }
 
 void SceneManager::Initialize()
