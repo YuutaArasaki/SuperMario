@@ -17,6 +17,8 @@ bool SceneManager::Update(float delta_second)
 {
 	InputManager* input = InputManager::GetInstance();
 
+	input->Update();
+
 	eSceneType next_scene = current_scene->Update(delta_second);
 
 	// ‰æ–Ê‚Ì‰Šú‰»

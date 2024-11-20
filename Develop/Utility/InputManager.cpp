@@ -28,16 +28,17 @@ void InputManager::Update()
 
 eInputState InputManager::GetKeyState(int key_code) const
 {
-	//キーが押されていたら
-	if (CheckKeycodeRange(key_code) && (now_key[key_code] == TRUE && old_key[key_code] == TRUE))
-	{
-		return eInputState::Held;
-	}
 
 	//キーが押された瞬間か
 	if (CheckKeycodeRange(key_code) && (now_key[key_code] == TRUE && old_key[key_code] == FALSE))
 	{
 		return eInputState::Pressed;
+	}
+
+	//キーが押されていたら
+	if (CheckKeycodeRange(key_code) && (now_key[key_code] == TRUE && old_key[key_code] == TRUE))
+	{
+		return eInputState::Held;
 	}
 
 	//キーが離された瞬間か

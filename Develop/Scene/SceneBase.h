@@ -13,6 +13,8 @@ enum eSceneType
 
 class SceneBase
 {
+protected:
+	int image;
 private:
 	Vector2D screen_offset;
 	GameObjectManager* objm;
@@ -27,14 +29,17 @@ public:
 	{
 		Finalize();
 	}
+
 	virtual void Initialize()
 	{
-
+		if (objm == nullptr)
+		{
+			objm = GameObjectManager::GetInstance();
+		}
 	}
 
 	virtual eSceneType Update(float delta_second)
 	{
-		objm = GameObjectManager::GetInstance();
 
 		for (GameObject* obj : objm->GetObjectsList())
 		{
@@ -46,12 +51,15 @@ public:
 
 	virtual void Draw() const
 	{
-
-		for (GameObject* obj : objm->GetObjectsList())
+		if (!objm->GetObjectsList().empty())
 		{
-			obj->Draw(screen_offset);
+			for (GameObject* obj : objm->GetObjectsList())
+			{
+				obj->Draw(screen_offset);
+			}
 		}
 	}
+
 	virtual void Finalize()
 	{
 

@@ -19,7 +19,7 @@ Application::~Application()
 
 bool Application::WakeUp()
 {
-	SceneManager* scene = SceneManager::GetInstance();
+	scene = SceneManager::GetInstance();
 
 	//ウィンドウモードで起動する
 	ChangeWindowMode(TRUE);
@@ -43,24 +43,15 @@ bool Application::WakeUp()
 
 void Application::Run()
 {
-	InputManager* input = InputManager::GetInstance();
 
 	while (ProcessMessage() == D_SUCCESS)
 	{
-		//入力情報の更新
-		input->Update();
-
 		//フレームレートの制御
 		UpdateDeLtaTime();
 
-		if (scene->Update(delta_second) == true)
-		{
-			scene->Update(delta_second);
-		}
-		else
-		{
-			break;
-		}
+		scene->Update(delta_second);
+		
+		
 	}
 
 	Shutdown();

@@ -17,7 +17,7 @@ protected:
 public:
 	static Type* GetInstance()
 	{
-		static Type* instance;
+		static Type* instance = new Type();
 		return instance;
 	}
 };
