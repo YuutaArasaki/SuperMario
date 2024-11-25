@@ -1,8 +1,9 @@
 #include "InGameScene.h"
 
+
 void InGameScene::Initialize()
 {
-
+	objm = GameObjectManager::GetInstance();
 }
 
 eSceneType InGameScene::Update(float delta_second)

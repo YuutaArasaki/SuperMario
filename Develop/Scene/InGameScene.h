@@ -1,8 +1,12 @@
 #pragma once
 #include "SceneBase.h"
+#include "../Object/GameObjectManager.h"
 
 class InGameScene : public SceneBase
 {
+private:
+	class GameObjectManager* objm;
+
 public:
 	virtual void Initialize() override;
 	virtual eSceneType Update(float delta_second) override;

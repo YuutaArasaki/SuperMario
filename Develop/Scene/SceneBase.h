@@ -20,7 +20,7 @@ private:
 	GameObjectManager* objm;
 
 public:
-	SceneBase() : screen_offset(0.0f),objm(nullptr)
+	SceneBase() : screen_offset(0.0f),objm(nullptr),image(0)
 	{
 
 	}
