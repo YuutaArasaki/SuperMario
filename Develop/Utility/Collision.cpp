@@ -13,3 +13,8 @@ bool Collision::IsCheckHitTarget(eObjectType object_type) const
 
 	return false;
 }
+
+bool Collision::IsCheckHitCollision(Collision target1, Collision target2)
+{
+	target1.box_size;
+}

@@ -13,5 +13,7 @@ public:
 	virtual void Draw() const override;
 	virtual void Finalize() override;
 	virtual eSceneType GetNowSceneType() const override;
+	virtual void CheckCollision(GameObject* target, GameObject* partner) override;
+
 };
 

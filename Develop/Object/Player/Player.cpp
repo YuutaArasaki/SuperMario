@@ -18,6 +18,7 @@ void Player::Initialize()
 	collision.hit_object_type.push_back(eObjectType::eEnemy);
 	collision.hit_object_type.push_back(eObjectType::eGround);
 	collision.hit_object_type.push_back(eObjectType::eItem);
+	collision.box_size = Vector2D(OBJECT_SIZE, OBJECT_SIZE);
 
 	//ƒŒƒCƒ„[Ý’è
 	z_layer = 5;
@@ -81,9 +82,24 @@ void Player::Finalize()
 	move_animation.clear();
 }
 
-void Player::OnHitCollision(GameObject*)
+void Player::OnHitCollision(GameObject* hit_object)
 {
 	
+}
+
+const Collision& Player::GetCollision() const
+{
+	return collision;
+}
+
+const unsigned char Player:: GetZLayer() const
+{
+	return z_layer;
+}
+
+const bool Player:: GetMobility() const
+{
+	return is_mobility;
 }
 
 ePlayerState Player::GetPlayerState() const
@@ -118,15 +134,16 @@ void Player::AnimationControl(float delta_second)
 	if (animation_time >= (1.0f / 16.0f))
 	{
 		animation_time = 0.0f;
-		animation_count++;
+	
+		image = move_animation[animation_num[animation_count]];
 
+		animation_count++;
+		
 		if (animation_count >= 3)
 		{
 			animation_count = 0;
 		}
-		else
-		{
-			image = move_animation[animation_num[animation_count]];		
-		}
+		
+		
 	}
 }

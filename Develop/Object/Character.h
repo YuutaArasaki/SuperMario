@@ -10,5 +10,9 @@ protected:
 
 public:
 	virtual void OnHitCollision(GameObject* hit_object) override;
+	virtual const Vector2D& GetLocation() const override;
+	virtual const Collision& GetCollision() const override;
+	virtual const unsigned char GetZLayer() const override;
+	virtual const bool GetMobility() const override;
 
 };

@@ -20,6 +20,6 @@ public:
 	std::vector<eObjectType> hit_object_type;
 
 	bool IsCheckHitTarget(eObjectType object_type) const;
-
+	bool IsCheckHitCollision(Collision target1, Collision target2);
 };
 

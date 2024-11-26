@@ -2,6 +2,8 @@
 #include "../Utility/Vector2D.h"
 #include "../Utility/Collision.h"
 
+#define OBJECT_SIZE	(24.0f)
+
 class GameObject
 {
 protected:
@@ -18,11 +20,11 @@ public:
 	virtual void Draw(const Vector2D& screen_offset) const;
 	virtual void Finalize();
 	virtual void OnHitCollision(GameObject* hit_object);
-	const Vector2D& GetLocation() const;
+	virtual const Vector2D& GetLocation() const;
 	void SetLocation(const Vector2D location);
-	const Collision& GetCollision() const;
-	const unsigned char GetZLayer() const;
-	const bool GetMobility() const;
+	virtual const Collision& GetCollision() const;
+	virtual const unsigned char GetZLayer() const;
+	virtual const bool GetMobility() const;
 
 };
 

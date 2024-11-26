@@ -69,5 +69,10 @@ public:
 	}
 
 	virtual eSceneType GetNowSceneType() const = 0;
+
+	virtual void CheckCollision(GameObject* target, GameObject* partner)
+	{
+
+	}
 };
 

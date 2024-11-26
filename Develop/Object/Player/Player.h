@@ -23,6 +23,7 @@ private:
 	ePlayerState next_state;
 	float animation_time;
 	int animation_count;
+	int image_change;
 
 	int animation_num[3] = { 1, 2, 3};	//アニメーションの順番
 
@@ -31,7 +32,10 @@ public:
 	virtual void Update(float delta_seconde) override;
 	virtual void Draw(const Vector2D& screen_offset) const override;
 	virtual void Finalize() override;
-	virtual void OnHitCollision(GameObject*) override;
+	virtual void OnHitCollision(GameObject* hit_object) override;
+	virtual const Collision& GetCollision() const override;
+	virtual const unsigned char GetZLayer() const override;
+	virtual const bool GetMobility() const override;
 	ePlayerState GetPlayerState() const;
 	void SetNextState(ePlayerState next_state);
 	void Filp_flag(bool flag);
