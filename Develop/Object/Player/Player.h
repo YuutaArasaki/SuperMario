@@ -8,7 +8,8 @@ enum ePlayerState
 	idle,
 	walk,
 	run,
-	jump
+	jump,
+	none
 };
 
 class Player : public Character
@@ -19,6 +20,7 @@ private:
 	std::vector<int> FireMario_animation;*/
 	std::vector<int> move_animation;
 	class PlayerStateBase* player_state;
+	ePlayerState next_state;
 	float animation_time;
 	int animation_count;
 
@@ -31,6 +33,9 @@ public:
 	virtual void Finalize() override;
 	virtual void OnHitCollision(GameObject*) override;
 	ePlayerState GetPlayerState() const;
+	void SetNextState(ePlayerState next_state);
+	void Filp_flag(bool flag);
+	void Set_Velocity(Vector2D velocity);
 
 private:
 	void Movement(float delta_second);

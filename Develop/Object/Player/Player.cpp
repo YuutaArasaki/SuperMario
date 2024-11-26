@@ -7,6 +7,7 @@
 void Player::Initialize()
 {
 	player_state = PlayerStateFactory::Get((*this), ePlayerState::idle);
+	next_state = none;
 
 	ResourceManager* rm = ResourceManager::GetInstance();
 	move_animation = rm->GetImageResource("Images/Mario/mario.png", 9, 9, 1, 32, 32);
@@ -23,22 +24,38 @@ void Player::Initialize()
 
 	//可動性の設定
 	is_mobility = true;
+
+	image = move_animation[0];
+
+	filp_flag = FALSE;	
+
 }
 
 void Player::Update(float delta_seconde)
 {
 	ePlayerState state;
+	
+	if (next_state != ePlayerState::none)
+	{
+		player_state = PlayerStateFactory::Get((*this), next_state);
+		next_state = ePlayerState::none;
+	}
+
 	state = GetPlayerState();
+
 	//プレイヤーの状態で、処理を変える
 	switch (state)
 	{
 		case ePlayerState::idle:
 			image = move_animation[0];
+			player_state->Initialize();
 			player_state->Update();
 			break;
 
 		case ePlayerState::walk:
+			player_state->Initialize();
 			player_state->Update();
+			Movement(delta_seconde);
 			AnimationControl(delta_seconde);
 			break;
 
@@ -71,12 +88,26 @@ void Player::OnHitCollision(GameObject*)
 
 ePlayerState Player::GetPlayerState() const
 {
-	player_state->GetState();
+	return player_state->GetState();
 }
 
+void Player::SetNextState(ePlayerState next_state)
+{
+	this->next_state = next_state;
+}
+
+void Player::Filp_flag(bool flag)
+{
+	filp_flag = flag;
+}
+
+void Player::Set_Velocity(Vector2D velocity)
+{
+	this->velocity = velocity;
+}
 void Player::Movement(float delta_second)
 {
-
+	location += velocity * delta_second;
 }
 
 void Player::AnimationControl(float delta_second)

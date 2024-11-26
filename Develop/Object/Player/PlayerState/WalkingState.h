@@ -1,10 +1,12 @@
 #pragma once
 #include "PlayerStateBase.h"
+#include "../../../Utility/InputManager.h"
 
 class WalkingState : public PlayerStateBase
 {
 public:
-	
+	InputManager* input;
+
 public:
 	WalkingState(class Player* p);
 	virtual ~WalkingState();

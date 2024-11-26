@@ -10,6 +10,7 @@ protected:
 	int image;
 	unsigned char z_layer;
 	bool is_mobility;
+	bool filp_flag;
 
 public:
 	virtual void Initialize();

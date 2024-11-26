@@ -25,7 +25,7 @@ void GameObject::Update(float delta_second)
 void GameObject::Draw(const Vector2D& screen_offset) const
 {
 	Vector2D graph_location = this->location + screen_offset;
-	DrawRotaGraphF(graph_location.x, graph_location.y, 1.0, 0.0, image, TRUE);
+	DrawRotaGraphF(graph_location.x, graph_location.y, 1.0, 0.0, image, TRUE, filp_flag);
 }
 
 /// <summary>

@@ -24,7 +24,8 @@ bool Application::WakeUp()
 	//ウィンドウモードで起動する
 	ChangeWindowMode(TRUE);
 
-	//ウィンドウサイズの設定	SetGraphMode(D_WIN_MAX_X, D_WIN_MAX_Y, D_COLOR_BIT);
+	//ウィンドウサイズの設定	
+	 SetGraphMode(D_WIN_MAX_X, D_WIN_MAX_Y, D_COLOR_BIT);
 
 	//DXライブラリの初期化
 	if (DxLib_Init() == D_FAILURE)
@@ -50,6 +51,7 @@ void Application::Run()
 		UpdateDeLtaTime();
 
 		scene->Update(delta_second);
+		
 		
 		
 	}

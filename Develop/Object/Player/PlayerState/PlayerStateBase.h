@@ -4,7 +4,7 @@
 class PlayerStateBase
 {
 protected:
-	Player* player;
+	class Player* player;
 
 public:
 	PlayerStateBase(Player* p) : player(p)
@@ -18,5 +18,5 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() const = 0;
 	virtual void Finalize() = 0;
-	virtual ePlayerState GetState() const = 0;
+	virtual enum ePlayerState GetState() const = 0;
 };

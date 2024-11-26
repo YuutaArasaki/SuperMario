@@ -91,7 +91,7 @@ OBJECT* CreateGameObject(const Vector2D & generate_location)
 {
 	OBJECT* new_instance = new OBJECT();
 
-	GameObjectManager* new_object = dynamic_cast<GameObjectManager*>(new_instance);
+	GameObject* new_object = dynamic_cast<GameObject*>(new_instance);
 
 	if (new_object == nullptr)
 	{
@@ -105,7 +105,9 @@ OBJECT* CreateGameObject(const Vector2D & generate_location)
 
 	new_object->SetLocation(generate_location);
 
-	game_object_list.push_back(new_object);
+	create_object.push_back(new_object);
+
+	CheckCreateObject();
 
 	return new_instance;
 }

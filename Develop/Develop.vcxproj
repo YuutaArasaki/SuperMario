@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Player\PlayerState\JumpingState.cpp" />
     <ClCompile Include="Object\Player\PlayerState\PlayerStateFactory.cpp" />
     <ClCompile Include="Object\Player\PlayerState\RunningState.cpp" />

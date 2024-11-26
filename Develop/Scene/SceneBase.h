@@ -22,7 +22,10 @@ private:
 public:
 	SceneBase() : screen_offset(0.0f),objm(nullptr),image(0)
 	{
-
+		if (objm == nullptr)
+		{
+			objm = GameObjectManager::GetInstance();
+		}
 	}
 	
 	virtual ~SceneBase()
@@ -32,10 +35,7 @@ public:
 
 	virtual void Initialize()
 	{
-		if (objm == nullptr)
-		{
-			objm = GameObjectManager::GetInstance();
-		}
+		
 	}
 
 	virtual eSceneType Update(float delta_second)
@@ -51,9 +51,12 @@ public:
 
 	virtual void Draw() const
 	{
-		if (!objm->GetObjectsList().empty())
+		
+		GameObjectManager* game = GameObjectManager::GetInstance();
+		
+		if (!game->GetObjectsList().empty())
 		{
-			for (GameObject* obj : objm->GetObjectsList())
+			for (GameObject* obj : game->GetObjectsList())
 			{
 				obj->Draw(screen_offset);
 			}
