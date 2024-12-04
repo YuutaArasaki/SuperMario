@@ -46,6 +46,8 @@ public:
 			obj->Update(delta_second);
 		}
 
+		objm->HitCheck();
+
 		return GetNowSceneType();
 	}
 

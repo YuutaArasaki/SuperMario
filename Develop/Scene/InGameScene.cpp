@@ -1,12 +1,14 @@
 #include "InGameScene.h"
 #include "../Object/Player/Player.h"
 #include "../Utility/Collision.h"
+#include "../Object/Enemy/Kuribo.h"
 
 void InGameScene::Initialize()
 {
 	objm = GameObjectManager::GetInstance();
 	Vector2D location = Vector2D(320, 240);
 	objm->CreateGameObject<Player>(location);
+	objm->CreateGameObject<Kuribo>(Vector2D(360, 240));
 }
 
 eSceneType InGameScene::Update(float delta_second)
@@ -47,5 +49,13 @@ void InGameScene::CheckCollision(GameObject* target, GameObject* partner)
 	{
 		tc.pivot += target->GetLocation();
 		pc.pivot += partner->GetLocation();
+
+		if (tc.IsCheckHitCollision(tc, pc))
+		{
+			target->OnHitCollision(partner);
+			partner->OnHitCollision(target);
+		}
 	}
+
+	
 }

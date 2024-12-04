@@ -18,7 +18,7 @@ void Player::Initialize()
 	collision.hit_object_type.push_back(eObjectType::eEnemy);
 	collision.hit_object_type.push_back(eObjectType::eGround);
 	collision.hit_object_type.push_back(eObjectType::eItem);
-	collision.box_size = Vector2D(OBJECT_SIZE, OBJECT_SIZE);
+	collision.box_size = Vector2D(32,32);
 
 	//レイヤー設定
 	z_layer = 5;
@@ -75,6 +75,10 @@ void Player::Draw(const Vector2D& screen_offset) const
 {
 	//親クラスの処理を呼び出す
 	__super::Draw(screen_offset);
+
+	Vector2D ul = location - (collision.box_size / 2);
+	Vector2D br = location + (collision.box_size / 2);
+	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
 }
 
 void Player::Finalize()
@@ -84,7 +88,14 @@ void Player::Finalize()
 
 void Player::OnHitCollision(GameObject* hit_object)
 {
-	
+	Collision hc = hit_object->GetCollision();
+
+	// めり込んだ差分
+	float diff = (this->GetCollision().box_size / 2 + hc.box_size / 2 - dv.Length();
+
+	// diffの分だけ戻る
+	location += dv.Normalize() * diff;
+}
 }
 
 const Collision& Player::GetCollision() const

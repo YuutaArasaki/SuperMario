@@ -1,7 +1,9 @@
 #pragma once
 #include "Vector2D.h"
 #include <vector>
-enum eObjectType : unsigned char
+
+
+enum eObjectType
 {
 	eNone,
 	ePlayer,
@@ -10,6 +12,15 @@ enum eObjectType : unsigned char
 	eGround,
 	eItem
 };
+
+enum eSide
+{
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT
+};
+
 class Collision
 {
 public:

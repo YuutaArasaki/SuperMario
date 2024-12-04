@@ -2,6 +2,7 @@
 #include "../Utility/Vector2D.h"
 #include "../Utility/Collision.h"
 
+
 #define OBJECT_SIZE	(24.0f)
 
 class GameObject
