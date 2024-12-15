@@ -9,6 +9,8 @@ class Camera
 private:
 	Player* player;
 	Vector2D camera_location;
+	float pivot_loaction;
+
 
 public:
 	Camera();

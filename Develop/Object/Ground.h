@@ -1,7 +1,7 @@
 #pragma once
 #include "BlockBase.h"
 
-class Block : public BlockBase
+class Ground : public BlockBase
 {
 public:
 	virtual void Initialize() override;

@@ -43,7 +43,6 @@ void Player::Initialize()
 
 	is_VectorY = NONE;
 
-	x = 0;
 
 }
 
@@ -131,7 +130,6 @@ void Player::Update(float delta_seconde)
 
 void Player::Draw(const Vector2D& screen_offset) const
 {
-
 	//親クラスの処理を呼び出す
 	__super::Draw(screen_offset);
 

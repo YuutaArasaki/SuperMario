@@ -1,8 +1,8 @@
-#include "Block.h"
+#include "Ground.h"
 #include "DxLib.h"
 
 
-void Block::Initialize()
+void Ground::Initialize()
 {
 	image = LoadGraph("Resource/Images/Block/floor.png");
 
@@ -21,12 +21,12 @@ void Block::Initialize()
 
 }
 
-void Block::Update(float delta_seconde)
+void Ground::Update(float delta_seconde)
 {
 
 }
 
-void Block::Draw(const Vector2D& screen_offset) const
+void Ground::Draw(const Vector2D& screen_offset) const
 {
 	__super::Draw(screen_offset);
 	Vector2D ul = location - (collision.box_size / 2);
@@ -34,32 +34,32 @@ void Block::Draw(const Vector2D& screen_offset) const
 	DrawBoxAA(ul.x - screen_offset.x, ul.y, br.x - screen_offset.x, br.y, GetColor(255, 0, 0), FALSE);
 }
 
-void Block::Finalize()
+void Ground::Finalize()
 {
 
 }
 
-void Block::OnHitCollision(GameObject* hit_object)
+void Ground::OnHitCollision(GameObject* hit_object)
 {
 
 }
 
-const Vector2D& Block::GetLocation() const
+const Vector2D& Ground::GetLocation() const
 {
 	return location;
 }
 
-const Collision& Block::GetCollision() const
+const Collision& Ground::GetCollision() const
 {
 	return collision;
 }
 
-const unsigned char Block::GetZLayer() const
+const unsigned char Ground::GetZLayer() const
 {
 	return z_layer;
 }
 
-const bool Block::GetMobility() const
+const bool Ground::GetMobility() const
 {
 	return is_mobility;
 }

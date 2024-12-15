@@ -2,7 +2,7 @@
 #include "../Object/Player/Player.h"
 #include "../Utility/Collision.h"
 #include "../Object/Enemy/Kuribo.h"
-#include "../Object/Block.h"
+#include "../Object/Ground.h"
 #include <fstream>
 
 
@@ -108,7 +108,7 @@ void InGameScene::LoadStageMapCSV()
 		else if (c == '1')
 		{
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
-			objm->CreateGameObject<Block>(generate_location);
+			objm->CreateGameObject<Ground>(generate_location);
 			x++;
 		}
 		else if (c == 'K')

@@ -6,6 +6,7 @@ class WalkingState : public PlayerStateBase
 {
 public:
 	InputManager* input;
+	double speed;
 
 public:
 	WalkingState(class Player* p);

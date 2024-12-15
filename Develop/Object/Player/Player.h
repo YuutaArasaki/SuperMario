@@ -49,6 +49,7 @@ public:
 	void Set_Velocity(Vector2D velocity_x);
 	void Set_Isground(bool flag);
 	Vector2D Get_1Velocity();
+	void Set_offset(float s);
 
 private:
 	void Movement(float delta_second);
