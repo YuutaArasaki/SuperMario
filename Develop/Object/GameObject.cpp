@@ -37,10 +37,18 @@ void GameObject::Finalize()
 }
 
 /// <summary>
-/// 当たり判定通知処理
+/// 当たり判定通知処理(当たっているとき)
 /// </summary>
 /// <param name="hit_object">当たったゲームオブジェクトのポインタ</param>
 void GameObject::OnHitCollision(GameObject* hit_object)
+{
+
+}
+
+/// <summary>
+/// 当たり判定通知処理(当たっていないとき)
+/// </summary>
+void GameObject::NoHitCollision()
 {
 
 }
@@ -89,3 +97,4 @@ const bool GameObject::GetMobility() const
 {
 	return is_mobility;
 }
+

@@ -4,7 +4,7 @@
 void Kuribo::Initialize()
 {
 	ResourceManager* rm = ResourceManager::GetInstance();
-	move_animation = rm->GetImageResource("Images/Enemy/kuribo.png", 3, 3, 1, 32, 32);
+	move_animation = rm->GetImageResource("Resource/Images/Enemy/kuribo.png", 3, 3, 1, 32, 32);
 
 	collision.is_blocking = true;
 	collision.object_type = eEnemy;
@@ -17,7 +17,7 @@ void Kuribo::Initialize()
 	z_layer = 4;
 
 	//‰Â“®«‚Ìİ’è
-	is_mobility = true;
+	is_mobility = false;
 
 	image = move_animation[0];
 }

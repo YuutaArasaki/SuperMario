@@ -3,7 +3,7 @@
 #include "../Utility/Collision.h"
 
 
-#define OBJECT_SIZE	(24.0f)
+#define OBJECT_SIZE	(32.0f)
 
 class GameObject
 {
@@ -21,11 +21,14 @@ public:
 	virtual void Draw(const Vector2D& screen_offset) const;
 	virtual void Finalize();
 	virtual void OnHitCollision(GameObject* hit_object);
+	virtual void NoHitCollision();
 	virtual const Vector2D& GetLocation() const;
 	void SetLocation(const Vector2D location);
 	virtual const Collision& GetCollision() const;
 	virtual const unsigned char GetZLayer() const;
 	virtual const bool GetMobility() const;
+
+
 
 };
 

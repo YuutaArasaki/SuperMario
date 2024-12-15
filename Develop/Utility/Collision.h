@@ -18,7 +18,8 @@ enum eSide
 	UP,
 	RIGHT,
 	DOWN,
-	LEFT
+	LEFT,
+	NONE
 };
 
 class Collision

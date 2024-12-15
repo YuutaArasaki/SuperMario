@@ -6,9 +6,9 @@
 void TitleScene::Initialize()
 {
 	ResourceManager* rm = ResourceManager::GetInstance();
-	UI_num = rm->GetImageResource("Images/UI/num.png", 15, 15, 1, 16, 16);
-	UI_string = rm->GetImageResource("Images/UI/string.png", 26, 26, 1, 16, 16);
-	UI_coin = rm->GetImageResource("Images/UI/uicoin.png", 4, 4, 1, 16, 16);
+	UI_num = rm->GetImageResource("Resource/Images/UI/num.png", 15, 15, 1, 16, 16);
+	UI_string = rm->GetImageResource("Resource/Images/UI/string.png", 26, 26, 1, 16, 16);
+	UI_coin = rm->GetImageResource("Resource/Images/UI/uicoin.png", 4, 4, 1, 16, 16);
 	num_image = UI_num[0];
 	for (int i = 0; UI_string.begin() + i < UI_string.end(); i++)
 	{
@@ -34,9 +34,9 @@ eSceneType TitleScene::Update(float delta_second)
 void TitleScene::Draw() const
 {
 	//ƒ^ƒCƒgƒ‹”wŒi‰æ‘œ‚Ì•`‰æ
-	LoadGraphScreen(0, 0, "Images/title.png", TRUE);
+	LoadGraphScreen(0, 0, "Resource/Images/title.png", TRUE);
 	//UIF•¶ŽšMARIO‚Ì•`‰æ
-	LoadGraphScreen(88, 28, "Images/UI/name_mario.png", TRUE);
+	LoadGraphScreen(88, 28, "Resource/Images/UI/name_mario.png", TRUE);
 	//UIFƒXƒRƒA‚Ì•`‰æi6Œ…‚Ì”Žšj
 	int x, y;
 	x = 96;

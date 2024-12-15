@@ -1,6 +1,8 @@
 #include "WalkingState.h"
 #include "../../../Utility/Vector2D.h"
 
+
+
 WalkingState::WalkingState(class Player* p)
 	: PlayerStateBase(p),input(nullptr)
 {
@@ -34,10 +36,17 @@ void WalkingState::Update()
 		player->Set_Velocity(Vector2D(5.0f, 0.0f));
 	}
 
+	if (input->GetKeyState(KEY_INPUT_SPACE) == eInputState::Pressed)
+	{
+		player->SetNextState(ePlayerState::jump);
+	}
+
 	if (input->GetKeyState(KEY_INPUT_D) == eInputState::None && input->GetKeyState(KEY_INPUT_A) == eInputState::None)
 	{
 		player->SetNextState(ePlayerState::idle);
 	}
+
+	
 }
 
 void WalkingState::Draw() const

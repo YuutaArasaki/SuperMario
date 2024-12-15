@@ -96,3 +96,7 @@ int Application::ErrorThrow(std::string error_log)
 	return D_FAILURE;
 }
 
+float Application::Get_delta_Second()
+{
+	return delta_second;
+}

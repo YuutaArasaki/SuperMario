@@ -15,4 +15,9 @@ public:
 	virtual const unsigned char GetZLayer() const override;
 	virtual const bool GetMobility() const override;
 
+	
+	virtual const  bool HitCheckUp(GameObject* hit_object, float side[][4]);
+	virtual const  bool HitCheckRight(GameObject* hit_object, float side[][4]);
+	virtual const  bool HitCheckDown(GameObject* hit_object, float side[][4]);
+	virtual const  bool HitCheckLeft(GameObject* hit_object, float side[][4]);
 };

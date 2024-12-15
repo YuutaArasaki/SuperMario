@@ -15,5 +15,7 @@ public:
 	virtual eSceneType GetNowSceneType() const override;
 	virtual void CheckCollision(GameObject* target, GameObject* partner) override;
 
+private:
+	 void LoadStageMapCSV();
 };
 

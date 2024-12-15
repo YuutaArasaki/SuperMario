@@ -25,6 +25,7 @@ public:
 	void Run();
 	void Shutdown();
 	int ErrorThrow(std::string error_log);
+	float Get_delta_Second();
 private:
 	void UpdateDeLtaTime();
 };

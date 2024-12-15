@@ -24,6 +24,13 @@ private:
 	float animation_time;
 	int animation_count;
 	int image_change;
+	float g_velocity;
+	bool is_ground;
+	eSide is_VectorX;
+	eSide is_VectorY;
+
+public:
+	bool jump_flag;
 
 	int animation_num[3] = { 1, 2, 3};	//アニメーションの順番
 
@@ -33,13 +40,17 @@ public:
 	virtual void Draw(const Vector2D& screen_offset) const override;
 	virtual void Finalize() override;
 	virtual void OnHitCollision(GameObject* hit_object) override;
+	virtual void NoHitCollision() override;
 	virtual const Collision& GetCollision() const override;
 	virtual const unsigned char GetZLayer() const override;
 	virtual const bool GetMobility() const override;
 	ePlayerState GetPlayerState() const;
 	void SetNextState(ePlayerState next_state);
 	void Filp_flag(bool flag);
-	void Set_Velocity(Vector2D velocity);
+	Vector2D Get_Velocity();
+	void Set_Velocity(Vector2D velocity_x);
+	void Set_Isground(bool flag);
+	Vector2D Get_1Velocity();
 
 private:
 	void Movement(float delta_second);

@@ -5,6 +5,9 @@
 #include "../Utility/Vector2D.h"
 #include "../Utility/Application.h"
 #include "../Scene/SceneBase.h"
+#include "../Utility/Collision.h"
+#include "Player/Player.h"
+
 
 class GameObjectManager : public Singleton <GameObjectManager>
 {
@@ -12,7 +15,9 @@ private:
 	std::vector<GameObject*> create_object;
 	std::vector<GameObject*> destroy_object;
 	std::vector<GameObject*> game_object_list;
-
+	Player* p = new Player();
+	
+	
 public:
 
 	void CheckCreateObject()
@@ -153,6 +158,8 @@ public:
 
 	void CheckCollision(GameObject* target, GameObject* partner)
 	{
+		int is_VectorX = 0;
+		int is_VectorY = 0;
 
 		if (target == nullptr || partner == nullptr)
 		{
@@ -161,9 +168,11 @@ public:
 
 		Collision tc = target->GetCollision();
 		Collision pc = partner->GetCollision();
+		
 
 		if (tc.IsCheckHitTarget(pc.object_type) || pc.IsCheckHitTarget(tc.object_type))
 		{
+
 			tc.pivot += target->GetLocation();
 			pc.pivot += partner->GetLocation();
 
@@ -172,6 +181,7 @@ public:
 				target->OnHitCollision(partner);
 				partner->OnHitCollision(target);
 			}
+			
 		}
 	}
 

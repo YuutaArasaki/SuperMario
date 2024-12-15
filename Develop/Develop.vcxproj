@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Block.cpp" />
     <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Enemy\Kuribo.cpp" />
     <ClCompile Include="Object\Enemy\Nokonoko.cpp" />
@@ -154,6 +155,8 @@
     <ClCompile Include="Object\Player\PlayerState\WalkingState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Block.h" />
+    <ClInclude Include="Object\BlockBase.h" />
     <ClInclude Include="Object\Enemy\Kuribo.h" />
     <ClInclude Include="Object\Enemy\Nokonoko.h" />
     <ClInclude Include="Object\Player\PlayerState\JumpingState.h" />
