@@ -2,6 +2,7 @@
 #include "../Utility/Vector2D.h"
 #include "../Object/GameObject.h"
 #include "../Object/GameObjectManager.h"
+#include "../Utility/Camera.h"
 
 enum eSceneType
 {
@@ -15,6 +16,8 @@ class SceneBase
 {
 protected:
 	int image;
+	Camera* camera;
+
 private:
 	Vector2D screen_offset;
 	GameObjectManager* objm;
@@ -22,10 +25,8 @@ private:
 public:
 	SceneBase() : screen_offset(0.0f),objm(nullptr),image(0)
 	{
-		if (objm == nullptr)
-		{
-			objm = GameObjectManager::GetInstance();
-		}
+		objm = GameObjectManager::GetInstance();
+		camera = new Camera();
 	}
 	
 	virtual ~SceneBase()
@@ -58,7 +59,7 @@ public:
 		{
 			for (GameObject* obj : game->GetObjectsList())
 			{
-				obj->Draw(screen_offset);
+				obj->Draw(camera->Get_CameraLocation());
 			}
 		}
 	}

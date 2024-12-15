@@ -131,13 +131,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Utility\Camera.cpp" />
     <ClCompile Include="Object\Block.cpp" />
     <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Enemy\Kuribo.cpp" />
     <ClCompile Include="Object\Enemy\Nokonoko.cpp" />
     <ClCompile Include="Object\Player\PlayerState\JumpingState.cpp" />
     <ClCompile Include="Object\Player\PlayerState\PlayerStateFactory.cpp" />
-    <ClCompile Include="Object\Player\PlayerState\RunningState.cpp" />
     <ClCompile Include="Object\Player\PlayerState\StoppedState.cpp" />
     <ClCompile Include="Utility\Application.cpp" />
     <ClCompile Include="AppMain.cpp" />
@@ -155,6 +155,7 @@
     <ClCompile Include="Object\Player\PlayerState\WalkingState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Utility\Camera.h" />
     <ClInclude Include="Object\Block.h" />
     <ClInclude Include="Object\BlockBase.h" />
     <ClInclude Include="Object\Enemy\Kuribo.h" />
@@ -162,7 +163,6 @@
     <ClInclude Include="Object\Player\PlayerState\JumpingState.h" />
     <ClInclude Include="Object\Player\PlayerState\PlayerStateBase.h" />
     <ClInclude Include="Object\Player\PlayerState\PlayerStateFactory.h" />
-    <ClInclude Include="Object\Player\PlayerState\RunningState.h" />
     <ClInclude Include="Object\Player\PlayerState\StoppedState.h" />
     <ClInclude Include="Utility\Application.h" />
     <ClInclude Include="Utility\Collision.h" />
@@ -181,6 +181,7 @@
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\Vector2D.h" />
     <ClInclude Include="Object\Player\PlayerState\WalkingState.h" />
+    <ClInclude Include="Utility\ProjectConfig.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

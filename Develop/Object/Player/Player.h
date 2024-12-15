@@ -7,7 +7,6 @@ enum ePlayerState
 {
 	idle,
 	walk,
-	run,
 	jump,
 	none
 };
@@ -28,7 +27,7 @@ private:
 	bool is_ground;
 	eSide is_VectorX;
 	eSide is_VectorY;
-
+	float x;
 public:
 	bool jump_flag;
 
@@ -40,7 +39,6 @@ public:
 	virtual void Draw(const Vector2D& screen_offset) const override;
 	virtual void Finalize() override;
 	virtual void OnHitCollision(GameObject* hit_object) override;
-	virtual void NoHitCollision() override;
 	virtual const Collision& GetCollision() const override;
 	virtual const unsigned char GetZLayer() const override;
 	virtual const bool GetMobility() const override;

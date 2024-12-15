@@ -31,7 +31,7 @@ void Block::Draw(const Vector2D& screen_offset) const
 	__super::Draw(screen_offset);
 	Vector2D ul = location - (collision.box_size / 2);
 	Vector2D br = location + (collision.box_size / 2);
-	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
+	DrawBoxAA(ul.x - screen_offset.x, ul.y, br.x - screen_offset.x, br.y, GetColor(255, 0, 0), FALSE);
 }
 
 void Block::Finalize()

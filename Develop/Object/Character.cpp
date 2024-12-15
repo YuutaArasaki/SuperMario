@@ -33,13 +33,13 @@ const bool Character::HitCheckUp(GameObject* hit_object, float side[][4])
 
 	if (this->GetLocation().x >= hit_object->GetLocation().x)
 	{
-		diff.x = side[0][LEFT] - side[1][RIGHT];
+		diff.x = side[1][RIGHT] - side[0][LEFT];
 		diff.y = side[1][DOWN] - side[0][UP];
 
 	}
 	else if (this->GetLocation().x < hit_object->GetLocation().x)
 	{
-		diff.x = side[1][LEFT] - side[0][RIGHT];
+		diff.x = side[0][RIGHT] - side[1][LEFT];
 		diff.y = side[0][UP] - side[1][DOWN];
 	}
 

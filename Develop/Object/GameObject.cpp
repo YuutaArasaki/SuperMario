@@ -24,7 +24,7 @@ void GameObject::Update(float delta_second)
 /// <param name="screen_offset">オフセット値</param>
 void GameObject::Draw(const Vector2D& screen_offset) const
 {
-	Vector2D graph_location = this->location + screen_offset;
+	Vector2D graph_location = this->location - screen_offset;
 	DrawRotaGraphF(graph_location.x, graph_location.y, 1.0, 0.0, image, TRUE, filp_flag);
 }
 
@@ -37,18 +37,10 @@ void GameObject::Finalize()
 }
 
 /// <summary>
-/// 当たり判定通知処理(当たっているとき)
+/// 当たり判定通知処理
 /// </summary>
 /// <param name="hit_object">当たったゲームオブジェクトのポインタ</param>
 void GameObject::OnHitCollision(GameObject* hit_object)
-{
-
-}
-
-/// <summary>
-/// 当たり判定通知処理(当たっていないとき)
-/// </summary>
-void GameObject::NoHitCollision()
 {
 
 }

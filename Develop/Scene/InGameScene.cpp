@@ -8,8 +8,10 @@
 
 void InGameScene::Initialize()
 {
+	Player* p;
 	objm = GameObjectManager::GetInstance();
-	objm->CreateGameObject<Player>(Vector2D(320, 240));
+	p = objm->CreateGameObject<Player>(Vector2D(320, 240));
+	camera->Set_Player(p);
 	LoadStageMapCSV();
 }
 
@@ -17,6 +19,8 @@ eSceneType InGameScene::Update(float delta_second)
 {
 
 	__super::Update(delta_second);
+
+	camera->Update();
 
 	objm->HitCheck();
 

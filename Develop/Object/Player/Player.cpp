@@ -43,6 +43,8 @@ void Player::Initialize()
 
 	is_VectorY = NONE;
 
+	x = 0;
+
 }
 
 void Player::Update(float delta_seconde)
@@ -74,11 +76,6 @@ void Player::Update(float delta_seconde)
 			AnimationControl(delta_seconde);
 			break;
 
-		case ePlayerState::run:
-			player_state->Update();
-			AnimationControl(delta_seconde);
-			break;
-
 		case ePlayerState::jump:
 			player_state->Update();
 			image = move_animation[5];
@@ -91,10 +88,10 @@ void Player::Update(float delta_seconde)
 	//重力速度の計算
 	if (velocity.y < 0)
 	{
-		g_velocity += D_GRAVITY / 111.0f;
+		g_velocity += D_GRAVITY / 444.0f;
 		velocity.y += g_velocity;
 	}
-	else if (velocity.y >= 0 && velocity.y <= 6)
+	else if (velocity.y >= 0 && velocity.y <= 9)
 	{
 		velocity.y += 3;
 	}
@@ -134,12 +131,13 @@ void Player::Update(float delta_seconde)
 
 void Player::Draw(const Vector2D& screen_offset) const
 {
+
 	//親クラスの処理を呼び出す
 	__super::Draw(screen_offset);
 
 	Vector2D ul = location - (collision.box_size / 2);
 	Vector2D br = location + (collision.box_size / 2);
-	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
+	DrawBoxAA(ul.x - screen_offset.x, ul.y, br.x - screen_offset.x, br.y, GetColor(255, 0, 0), FALSE);
 	DrawCircle(location.x, location.y, 5, GetColor(0, 255, 0), 1);
 
 	/*DrawFormatString(320, 240, GetColor(255, 0, 0), "X:%d", is_VectorX);
@@ -147,8 +145,6 @@ void Player::Draw(const Vector2D& screen_offset) const
 	DrawFormatString(320, 240, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
 	DrawFormatString(320, 280, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
 	
-
-
 }
 
 void Player::Finalize()
@@ -214,9 +210,6 @@ void Player::OnHitCollision(GameObject* hit_object)
 		}
 	}
 	
-	
-
-	
 	//当たり判定（左辺）
 	if (HitCheckLeft(hit_object, side) == true && is_VectorX == LEFT)
 	{
@@ -228,11 +221,6 @@ void Player::OnHitCollision(GameObject* hit_object)
 
 }
 
-void Player::NoHitCollision()
-{
-	/*is_ground = false;
-	jump_flag = false;*/
-}
 
 const Collision& Player::GetCollision() const
 {
