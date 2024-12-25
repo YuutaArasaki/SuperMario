@@ -84,16 +84,12 @@ void Player::Update(float delta_seconde)
 			break;
 	}
 
-	//d—Í‘¬“x‚ÌŒvZ
-	if (velocity.y < 0)
+	
+	if (state != jump)
 	{
-		g_velocity += D_GRAVITY / 444.0f;
-		velocity.y += g_velocity;
+		velocity.y = 3;
 	}
-	else if (velocity.y >= 0 && velocity.y <= 9)
-	{
-		velocity.y += 3;
-	}
+
 	
 	Movement(delta_seconde);
 

@@ -29,9 +29,16 @@ void WalkingState::Update()
 
 	if (input->GetKeyState(KEY_INPUT_A) == eInputState::Pressed || input->GetKeyState(KEY_INPUT_A) == eInputState::Held)
 	{
-		
-		player->Filp_flag(TRUE);
-		player->Set_Velocity(Vector2D(-3.0f + speed, 0.0f));
+		if (input->GetKeyState(KEY_INPUT_D) != eInputState::Pressed && input->GetKeyState(KEY_INPUT_D) != eInputState::Held)
+		{
+			if (speed > -4)
+			{
+				speed += (float)-4 / 50;
+			}
+
+			player->Filp_flag(TRUE);
+			player->Set_Velocity(Vector2D(speed, 0.0f));
+		}
 	
 	}
 	
@@ -39,12 +46,20 @@ void WalkingState::Update()
 
 	if (input->GetKeyState(KEY_INPUT_D) == eInputState::Pressed || input->GetKeyState(KEY_INPUT_D) == eInputState::Held)
 	{
-		player->Filp_flag(FALSE);
-		player->Set_Velocity(Vector2D(3.0f + speed, 0.0f));
+		if (input->GetKeyState(KEY_INPUT_A) != eInputState::Pressed && input->GetKeyState(KEY_INPUT_A) != eInputState::Held)
+		{
+			if (speed < 4)
+			{
+				speed += (float)4 / 50;
+			}
+
+			player->Filp_flag(FALSE);
+			player->Set_Velocity(Vector2D(speed, 0.0f));
+		}
 		
 	}
 	
-	
+
 
 	if (input->GetKeyState(KEY_INPUT_SPACE) == eInputState::Pressed)
 	{
@@ -54,7 +69,27 @@ void WalkingState::Update()
 	
 	if (input->GetKeyState(KEY_INPUT_D) == eInputState::None && input->GetKeyState(KEY_INPUT_A) == eInputState::None)
 	{
-		player->SetNextState(ePlayerState::idle);
+		if (speed > 0)
+		{
+			speed += (float)-4 / 50;
+			if (speed < 1.0e-6f)
+			{
+				speed = 0;
+				player->SetNextState(ePlayerState::idle);
+			}
+		}
+		else
+		{
+			speed += (float)4 / 50;
+			if (speed > -1.0e-6f)
+			{
+				speed = 0;
+				player->SetNextState(ePlayerState::idle);
+			}
+		}
+
+		
+		
 	}
 	
 

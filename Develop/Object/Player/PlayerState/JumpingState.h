@@ -2,6 +2,10 @@
 #include "PlayerStateBase.h"
 class JumpingState : public PlayerStateBase
 {
+private:
+	float g_velocity;
+	Vector2D j_velocity;
+
 public:
 	JumpingState(class Player* p);
 
