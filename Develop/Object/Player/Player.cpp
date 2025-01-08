@@ -43,7 +43,12 @@ void Player::Initialize()
 
 	is_VectorY = NONE;
 
+	for (int i = 0; i < 4; i++)
+	{
+		hit[i] = 0;
+	}
 
+	p_state = 0;
 }
 
 void Player::Update(float delta_seconde)
@@ -90,6 +95,14 @@ void Player::Update(float delta_seconde)
 		velocity.y = 3;
 	}
 
+	if (state == idle)
+	{
+		p_state = 1;
+	}
+	else
+	{
+		p_state = 0;
+	}
 	
 	Movement(delta_seconde);
 
@@ -136,9 +149,11 @@ void Player::Draw(const Vector2D& screen_offset) const
 
 	/*DrawFormatString(320, 240, GetColor(255, 0, 0), "X:%d", is_VectorX);
 	DrawFormatString(360, 240, GetColor(255, 0, 0), "Y:%d", is_VectorY);*/
-	DrawFormatString(320, 240, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
+	/*DrawFormatString(320, 240, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
 	DrawFormatString(320, 280, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
-	
+	DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
+	DrawFormatString(320, 320, GetColor(255, 0, 0), "ground:%d", is_ground);
+	DrawFormatString(400, 320, GetColor(255, 0, 0), "idle:%d", p_state);*/
 }
 
 void Player::Finalize()
@@ -149,36 +164,38 @@ void Player::Finalize()
 void Player::OnHitCollision(GameObject* hit_object)
 {
 
-	Collision hc = hit_object->GetCollision();
-	Vector2D el = hit_object->GetLocation();
 	Vector2D dv = Vector2D(0, 0);
 
-	Collision target1 = this->GetCollision();
-	Collision target2 = hit_object->GetCollision();
+	
+	Collision target = hit_object->GetCollision();
 
-	Vector2D t_location1 = this->GetLocation();
-	Vector2D t_location2 = hit_object->GetLocation();
+	Vector2D t_location = hit_object->GetLocation();
 
 	float side[2][4];
 
 	//target1の矩形当たり判定の辺の座標
-	side[0][UP] = t_location1.y - (target1.box_size.y / 2);
-	side[0][RIGHT] = t_location1.x + (target1.box_size.x / 2);
-	side[0][DOWN] = t_location1.y + (target1.box_size.y / 2);
-	side[0][LEFT] = t_location1.x - (target1.box_size.x / 2);
+	side[0][UP] = this->location.y - (this->collision.box_size.y / 2);
+	side[0][RIGHT] = this->location.x + (this->collision.box_size.x / 2);
+	side[0][DOWN] = this->location.y + (this->collision.box_size.y / 2);
+	side[0][LEFT] = this->location.x - (this->collision.box_size.x / 2);
 
 	//target2の矩形当たり判定の辺の座標
-	side[1][UP] = t_location2.y - (target1.box_size.y / 2);
-	side[1][RIGHT] = t_location2.x + (target1.box_size.x / 2);
-	side[1][DOWN] = t_location2.y + (target1.box_size.y / 2);
-	side[1][LEFT] = t_location2.x - (target1.box_size.x / 2);
+	side[1][UP] = t_location.y - (target.box_size.y / 2);
+	side[1][RIGHT] = t_location.x + (target.box_size.x / 2);
+	side[1][DOWN] = t_location.y + (target.box_size.y / 2);
+	side[1][LEFT] = t_location.x - (target.box_size.x / 2);
 
 	//当たり半手（上辺）
 	if (HitCheckUp(hit_object, side) == true && is_VectorY == UP)
 	{
 		jump_flag = false;
 		velocity.y = 0.0f;
- 		dv.y = (location.y - collision.box_size.y / 2) - (el.y + hc.box_size.y / 2);
+ 		dv.y = (this->location.y - collision.box_size.y / 2) - (t_location.y + target.box_size.y / 2);
+		hit[0] = true;
+	}
+	else
+	{
+		hit[0] = false;
 	}
 	
 
@@ -186,28 +203,42 @@ void Player::OnHitCollision(GameObject* hit_object)
 	if (HitCheckRight(hit_object, side) == true && is_VectorX == RIGHT)
 	{
 
-		dv.x = (location.x + collision.box_size.x / 2) - (el.x - hc.box_size.x / 2);
+		dv.x = (this->location.x + collision.box_size.x / 2) - (t_location.x - target.box_size.x / 2);
+		hit[1] = true;
 		
+	}
+	else
+	{
+		hit[1] = false;
 	}
 	
 	//当たり判定（下辺）
 	if (HitCheckDown(hit_object, side) == true && is_VectorY == DOWN)
 	{
 		jump_flag = true;
-		dv.y = (location.y + collision.box_size.y / 2) - (el.y - hc.box_size.y / 2);
-
-		if (hc.object_type == eGround)
+		dv.y = (this->location.y + collision.box_size.y / 2) - (t_location.y - target.box_size.y / 2);
+		hit[2] = true;
+		if (target.object_type == eGround)
 		{
 			is_ground = true;
 			g_velocity = 0.0f;
 			velocity.y = 0.0f;
 		}
 	}
+	else
+	{
+		hit[2] = false;
+	}
 	
 	//当たり判定（左辺）
 	if (HitCheckLeft(hit_object, side) == true && is_VectorX == LEFT)
 	{
-		dv.x = (location.x - collision.box_size.x / 2) - (el.x + hc.box_size.x / 2);
+		dv.x = (this->location.x - collision.box_size.x / 2) - (t_location.x + target.box_size.x / 2);
+		hit[3] = true;
+	}
+	else
+	{
+		hit[3] = false;
 	}
 
 	// めり込んだ分だけ戻る

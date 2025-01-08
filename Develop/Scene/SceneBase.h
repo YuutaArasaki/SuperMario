@@ -47,6 +47,8 @@ public:
 			obj->Update(delta_second);
 		}
 
+		objm->CheckDstroyObject();
+
 		return GetNowSceneType();
 	}
 

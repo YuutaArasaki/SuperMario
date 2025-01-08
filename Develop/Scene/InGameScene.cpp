@@ -1,4 +1,5 @@
 #include "InGameScene.h"
+#include "../Utility/ResourceManager.h"
 #include "../Object/Player/Player.h"
 #include "../Utility/Collision.h"
 #include "../Object/Enemy/Kuribo.h"
@@ -8,10 +9,13 @@
 
 void InGameScene::Initialize()
 {
+	x = 0;
 	Player* p;
+	ResourceManager* rm = ResourceManager::GetInstance();
 	objm = GameObjectManager::GetInstance();
 	p = objm->CreateGameObject<Player>(Vector2D(320, 240));
 	camera->Set_Player(p);
+	Cloudimage = rm->GetImageResource("Resource/Images/cloud.png", 6, 3, 2, 32, 32);
 	LoadStageMapCSV();
 }
 
@@ -24,6 +28,8 @@ eSceneType InGameScene::Update(float delta_second)
 
 	objm->HitCheck();
 
+	DeleteObject();
+
 	Draw();
 
 	return GetNowSceneType();
@@ -31,6 +37,7 @@ eSceneType InGameScene::Update(float delta_second)
 
 void InGameScene::Draw() const
 {
+	DrawFormatString(320,240,GetColor(255, 0, 0), "%f", x);
 	__super::Draw();
 }
 
@@ -85,12 +92,18 @@ void InGameScene::LoadStageMapCSV()
 
 	int x = 0;
 	int y = 0;
+	int i = 0;
 
 	// ファイル内の文字を確認していく
 	while (true)
 	{
 		// ファイルから1文字抽出する
 		int c = fgetc(fp);
+
+		if (i == 6)
+		{
+			i = 0;
+		}
 
 		// 抽出した文字がEOFならループ終了
 		if (c == EOF)
@@ -122,6 +135,11 @@ void InGameScene::LoadStageMapCSV()
 		{
 			x++;
 		}
+		else if (c == '2')
+		{
+			i++;
+			x++;
+		}
 		// 抽出した文字が改行文字なら、次の行を見に行く
 		else if (c == '\n')
 		{
@@ -133,4 +151,23 @@ void InGameScene::LoadStageMapCSV()
 
 	// 開いたファイルを閉じる
 	fclose(fp);
+}
+
+void InGameScene::DeleteObject()
+{
+	Vector2D camera_location = camera->Get_CameraLocation();
+	camera_location.x = camera_location.x - (D_WIN_MAX_X / 2);
+	std::vector<GameObject*> object_list = objm->GetObjectsList();
+	
+	if (!object_list.empty())
+	{
+		for (int i = 0; i < object_list.size(); i++)
+		{
+			 x = object_list[i]->GetLocation().x;
+			if (0 >= x)
+			{
+				objm->DestroyGameObject(object_list[i]);
+			}
+		}
+	}
 }

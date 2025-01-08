@@ -6,6 +6,8 @@ class InGameScene : public SceneBase
 {
 private:
 	class GameObjectManager* objm;
+	std::vector<int> Cloudimage;
+	float x;
 
 public:
 	virtual void Initialize() override;
@@ -17,5 +19,6 @@ public:
 
 private:
 	 void LoadStageMapCSV();
+	 void DeleteObject();
 };
 

@@ -21,12 +21,15 @@ void JumpingState::Initialize()
 	this->player->Set_Velocity(Vector2D(player->Get_Velocity().x, JUMP_VECTOR));
 	j_velocity = player->Get_Velocity();
 	this->player->jump_flag = false;
+	j_velocity = 0;
+	g_velocity - 0;
+
 }
 
 void JumpingState::Update()
 {
 	InputManager* input = InputManager::GetInstance();
-
+	j_velocity = player->Get_Velocity();
 	//d—Í‘¬“x‚ÌŒvZ
 	if (j_velocity.y < 0)
 	{
@@ -34,7 +37,7 @@ void JumpingState::Update()
 		j_velocity.y += g_velocity;
 		player->Set_Velocity(j_velocity);
 	}
-	else if (j_velocity.y >= 0 && j_velocity.y <= 9)
+	else if (j_velocity.y >= 0 && j_velocity.y <= 12)
 	{
 		j_velocity.y += 3;
 		player->Set_Velocity(j_velocity);

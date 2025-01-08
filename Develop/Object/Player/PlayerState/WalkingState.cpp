@@ -33,7 +33,7 @@ void WalkingState::Update()
 		{
 			if (speed > -4)
 			{
-				speed += (float)-4 / 50;
+				speed += (float)-4 / 20;
 			}
 
 			player->Filp_flag(TRUE);
@@ -43,14 +43,13 @@ void WalkingState::Update()
 	}
 	
 
-
 	if (input->GetKeyState(KEY_INPUT_D) == eInputState::Pressed || input->GetKeyState(KEY_INPUT_D) == eInputState::Held)
 	{
 		if (input->GetKeyState(KEY_INPUT_A) != eInputState::Pressed && input->GetKeyState(KEY_INPUT_A) != eInputState::Held)
 		{
 			if (speed < 4)
 			{
-				speed += (float)4 / 50;
+				speed += (float)4 / 20;
 			}
 
 			player->Filp_flag(FALSE);
@@ -59,10 +58,11 @@ void WalkingState::Update()
 		
 	}
 	
-
+	
 
 	if (input->GetKeyState(KEY_INPUT_SPACE) == eInputState::Pressed)
 	{
+		speed = 0;
 		player->SetNextState(ePlayerState::jump);
 	}
 
@@ -71,7 +71,7 @@ void WalkingState::Update()
 	{
 		if (speed > 0)
 		{
-			speed += (float)-4 / 50;
+			speed += (float)-4 / 20;
 			if (speed < 1.0e-6f)
 			{
 				speed = 0;
@@ -80,19 +80,15 @@ void WalkingState::Update()
 		}
 		else
 		{
-			speed += (float)4 / 50;
-			if (speed > -1.0e-6f)
+			speed += (float)4 / 20;
+			if (speed < -1.0e-6f)
 			{
 				speed = 0;
 				player->SetNextState(ePlayerState::idle);
 			}
 		}
-
-		
 		
 	}
-	
-
 	
 }
 

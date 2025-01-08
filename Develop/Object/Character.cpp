@@ -123,7 +123,7 @@ const bool Character::HitCheckDown(GameObject* hit_object, float side[][4])
 		diff.y *= -1;
 	}
 	
-	if (diff.x > diff.y)
+	if (diff.x >= diff.y)
 	{
 		return true;
 	}

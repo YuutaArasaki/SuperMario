@@ -28,6 +28,9 @@ private:
 	eSide is_VectorX;
 	eSide is_VectorY;
 	float x;
+	bool hit[4];
+	int p_state;
+
 public:
 	bool jump_flag;
 
