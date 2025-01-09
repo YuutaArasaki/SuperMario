@@ -100,15 +100,15 @@ void InGameScene::LoadStageMapCSV()
 		// ファイルから1文字抽出する
 		int c = fgetc(fp);
 
-		if (i == 6)
-		{
-			i = 0;
-		}
-
 		// 抽出した文字がEOFならループ終了
 		if (c == EOF)
 		{
 			break;
+		}
+		else if (x >= 20)
+		{
+			x = 0;
+			y++;
 		}
 		//抽出した文字が'P'ならPlaeyrを描画する
 		/*else if (c == 'P')
@@ -137,15 +137,14 @@ void InGameScene::LoadStageMapCSV()
 		}
 		else if (c == '2')
 		{
-			i++;
 			x++;
 		}
 		// 抽出した文字が改行文字なら、次の行を見に行く
-		else if (c == '\n')
+		/*else if (c == '\n')
 		{
 			x = 0;
 			y++;
-		}
+		}*/
 
 	}
 
@@ -156,18 +155,18 @@ void InGameScene::LoadStageMapCSV()
 void InGameScene::DeleteObject()
 {
 	Vector2D camera_location = camera->Get_CameraLocation();
-	camera_location.x = camera_location.x - (D_WIN_MAX_X / 2);
 	std::vector<GameObject*> object_list = objm->GetObjectsList();
 	
 	if (!object_list.empty())
 	{
 		for (int i = 0; i < object_list.size(); i++)
 		{
-			 x = object_list[i]->GetLocation().x;
+			 x = (object_list[i]->GetLocation().x + OBJECT_SIZE / 2) - camera_location.x;
 			if (0 >= x)
 			{
-				objm->DestroyGameObject(object_list[i]);
+ 				objm->DestroyGameObject(object_list[i]);
 			}
 		}
+
 	}
 }
