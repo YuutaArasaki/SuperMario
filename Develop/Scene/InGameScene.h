@@ -2,12 +2,18 @@
 #include "SceneBase.h"
 #include "../Object/GameObjectManager.h"
 
+
+
 class InGameScene : public SceneBase
 {
 private:
 	class GameObjectManager* objm;
 	std::vector<int> Cloudimage;
+	Player* p;
 	float x;
+	int stage_count;
+	int load_line;
+	int load_column;
 
 public:
 	virtual void Initialize() override;
@@ -18,7 +24,7 @@ public:
 	virtual void CheckCollision(GameObject* target, GameObject* partner) override;
 
 private:
-	 void LoadStageMapCSV();
+	 void LoadStageMapCSV(int map_type, int x);		//マップ読み込み処理：引数：map_type = 読み込むマップの種類, x = 読み込みを開始する行
 	 void DeleteObject();
 };
 
