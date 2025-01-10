@@ -32,7 +32,6 @@ void StoppedState::Update()
 
 	if (input->GetKeyState(KEY_INPUT_SPACE) == eInputState::Pressed)
 	{
-		player->Filp_flag(FALSE);
 		player->SetNextState(ePlayerState::jump);
 	}
 }

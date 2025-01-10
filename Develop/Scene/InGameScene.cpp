@@ -3,7 +3,7 @@
 #include "../Object/Player/Player.h"
 #include "../Utility/Collision.h"
 #include "../Object/Enemy/Kuribo.h"
-#include "../Object/Ground.h"
+#include "../Object/Blocks/Ground.h"
 #include <fstream>
 
 #define MAX_LOAD_LINE	20;
@@ -113,6 +113,7 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 
 
 	int y = 0;
+	int i = 0;
 	bool f = false;
 
 	// ファイル内の文字を確認していく
@@ -163,14 +164,22 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 		}
 		else if (c == '2')
 		{
+			if (i >= 6)
+			{
+				i = 0;
+			}
+			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
+			DrawGraph(generate_location.x, generate_location.y, Cloudimage[i], TRUE);
+			__super::Draw();
+			i++;
 			x++;
 		}
 		// 抽出した文字が改行文字なら、次の行を見に行く
-		/*else if (c == '\n')
+		else if (c == '\n')
 		{
 			x = 0;
 			y++;
-		}*/
+		}
 
 	}
 

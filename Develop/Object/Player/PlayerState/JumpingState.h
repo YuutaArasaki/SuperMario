@@ -5,6 +5,7 @@ class JumpingState : public PlayerStateBase
 private:
 	float g_velocity;
 	Vector2D j_velocity;
+	float Held_jump;
 
 public:
 	JumpingState(class Player* p);

@@ -131,8 +131,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\BackGround\Mountain.cpp" />
+    <ClCompile Include="Object\BackGround\Leaf.cpp" />
+    <ClCompile Include="Object\BackGround\Cloud.cpp" />
+    <ClCompile Include="Object\Blocks\HardBlock.cpp" />
+    <ClCompile Include="Object\Blocks\Brick.cpp" />
+    <ClCompile Include="Object\Blocks\Question.cpp" />
+    <ClCompile Include="Object\BackGround\Sky.cpp" />
     <ClCompile Include="Utility\Camera.cpp" />
-    <ClCompile Include="Object\Ground.cpp" />
+    <ClCompile Include="Object\Blocks\Ground.cpp" />
     <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Enemy\Kuribo.cpp" />
     <ClCompile Include="Object\Enemy\Nokonoko.cpp" />
@@ -155,9 +162,16 @@
     <ClCompile Include="Object\Player\PlayerState\WalkingState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\BackGround\Mountain.h" />
+    <ClInclude Include="Object\BackGround\Leaf.h" />
+    <ClInclude Include="Object\BackGround\Cloud.h" />
+    <ClInclude Include="Object\Blocks\HardBlock.h" />
+    <ClInclude Include="Object\Blocks\Brick.h" />
+    <ClInclude Include="Object\Blocks\Question.h" />
+    <ClInclude Include="Object\BackGround\Sky.h" />
     <ClInclude Include="Utility\Camera.h" />
-    <ClInclude Include="Object\Ground.h" />
-    <ClInclude Include="Object\BlockBase.h" />
+    <ClInclude Include="Object\Blocks\Ground.h" />
+    <ClInclude Include="Object\Blocks\BlockBase.h" />
     <ClInclude Include="Object\Enemy\Kuribo.h" />
     <ClInclude Include="Object\Enemy\Nokonoko.h" />
     <ClInclude Include="Object\Player\PlayerState\JumpingState.h" />

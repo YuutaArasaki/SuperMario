@@ -149,11 +149,11 @@ void Player::Draw(const Vector2D& screen_offset) const
 
 	/*DrawFormatString(320, 240, GetColor(255, 0, 0), "X:%d", is_VectorX);
 	DrawFormatString(360, 240, GetColor(255, 0, 0), "Y:%d", is_VectorY);*/
-	/*DrawFormatString(320, 240, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
-	DrawFormatString(320, 280, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
-	DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
-	DrawFormatString(320, 320, GetColor(255, 0, 0), "ground:%d", is_ground);
-	DrawFormatString(400, 320, GetColor(255, 0, 0), "idle:%d", p_state);*/
+	DrawFormatString(320, 270, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
+	//DrawFormatString(320, 280, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
+	//DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
+	//DrawFormatString(320, 320, GetColor(255, 0, 0), "ground:%d", filp_flag);
+	//DrawFormatString(400, 320, GetColor(255, 0, 0), "idle:%d", p_state);
 }
 
 void Player::Finalize()
