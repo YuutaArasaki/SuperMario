@@ -17,7 +17,7 @@ JumpingState::~JumpingState()
 
 void JumpingState::Initialize()
 {
-	this->player->Set_Isground(false);
+	this->player->Set_IsGround(false);
 	this->player->Set_Velocity(Vector2D(player->Get_Velocity().x, JUMP_VECTOR));
 	j_velocity = player->Get_Velocity();
 	this->player->jump_flag = false;
@@ -30,25 +30,24 @@ void JumpingState::Initialize()
 void JumpingState::Update()
 {
 	InputManager* input = InputManager::GetInstance();
-	j_velocity = player->Get_Velocity();
 
 	//SPACEキーを押し続けるとジャンプの高さが変化する
-	if (input->GetKeyState(KEY_INPUT_SPACE) == Held && Held_jump < 24)
+	if (input->GetKeyState(KEY_INPUT_SPACE) == Held && Held_jump < 30)
 	{
-	
-		j_velocity.y += -0.5;
+		j_velocity = player->Get_Velocity();
+		j_velocity.y += -0.4;
 		player->Set_Velocity(j_velocity);
 		Held_jump++;
 	}
 
 	//重力速度の計算
-	if (j_velocity.y < 0)
+	/*if (j_velocity.y < 0)
 	{
 		g_velocity += D_GRAVITY / 444.0f;
 		j_velocity.y += g_velocity;
 		player->Set_Velocity(j_velocity);
 	}
-	else if (j_velocity.y >= 0 && j_velocity.y <= 12)
+	else */if (j_velocity.y >= 0 && j_velocity.y <= 12)
 	{
 		j_velocity.y += 3;
 		player->Set_Velocity(j_velocity);

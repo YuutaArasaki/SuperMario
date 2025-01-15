@@ -4,6 +4,8 @@
 #include "../Utility/Collision.h"
 #include "../Object/Enemy/Kuribo.h"
 #include "../Object/Blocks/Ground.h"
+#include "../Object/BackGround/Cloud.h"
+#include "../Object/BackGround/Sky.h"
 #include <fstream>
 
 #define MAX_LOAD_LINE	20;
@@ -33,13 +35,6 @@ eSceneType InGameScene::Update(float delta_second)
 
 	Draw();
 
-	if (stage_count < 3)
-	{
-		if (p->GetLocation().x > 320 && stage_count == 2)
-		{
- 			LoadStageMapCSV(stage_count, load_line);
-		}
-	}
 
 	return GetNowSceneType();
 }
@@ -88,18 +83,8 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 {
 
 	FILE* fp = NULL;
-	std::string file_name  = "NULL";
 
-	if (map_type == 1)
-	{
-		file_name = "Resource/Map/Map1.csv";
-		stage_count++;
-	}
-	else if (map_type == 2)
-	{
-		file_name = "Resource/Map/Map2.csv";
-		stage_count++;
-	}
+	std::string file_name = "Resource/Map/Map1.csv";
 
 
 	// 指定されたファイルを開く
@@ -114,7 +99,7 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 
 	int y = 0;
 	int i = 0;
-	bool f = false;
+	Cloud* cloud = nullptr;
 
 	// ファイル内の文字を確認していく
 	while (true)
@@ -122,8 +107,6 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 
 		// ファイルから1文字抽出する
 		int c = fgetc(fp);
-		
-		/*int c = fgetc(fp);*/
 
 		// 抽出した文字がEOFならループ終了
 		if (c == EOF)
@@ -142,6 +125,7 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
 			p = objm->CreateGameObject<Player>(generate_location);
 			camera->Set_Player(p);
+			objm->CreateGameObject<Sky>(generate_location);
 			x++;
 		}
 		// 抽出した文字がドットなら、地面を生成
@@ -155,22 +139,29 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 		{
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
 			objm->CreateGameObject<Kuribo>(generate_location);
+			objm->CreateGameObject<Sky>(generate_location);
 			x++;
 		}
 		// 抽出した文字が空白文字なら、生成しないで次の文字を見に行く
 		else if (c == '0')
 		{
+			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
+			objm->CreateGameObject<Sky>(generate_location);
 			x++;
 		}
 		else if (c == '2')
 		{
-			if (i >= 6)
+			if (i > 5)
 			{
 				i = 0;
 			}
+
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
-			DrawGraph(generate_location.x, generate_location.y, Cloudimage[i], TRUE);
-			__super::Draw();
+			cloud = objm->CreateGameObject<Cloud>(generate_location);
+			if (cloud != nullptr)
+			{
+				cloud->Set_Cloudimage(i);
+			}
 			i++;
 			x++;
 		}
@@ -196,7 +187,7 @@ void InGameScene::DeleteObject()
 	{
 		for (int i = 0; i < object_list.size(); i++)
 		{
-			 x = (object_list[i]->GetLocation().x + OBJECT_SIZE / 2) - camera_location.x;
+			int x = (object_list[i]->GetLocation().x + OBJECT_SIZE / 2) - camera_location.x;
 			if (0 >= x)
 			{
  				objm->DestroyGameObject(object_list[i]);

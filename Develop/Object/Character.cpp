@@ -26,6 +26,11 @@ const bool Character:: GetMobility() const
 	return is_mobility;
 }
 
+const State Character::GetState()
+{
+	return state;
+}
+
 
 const bool Character::HitCheckUp(GameObject* hit_object, float side[][4])
 {

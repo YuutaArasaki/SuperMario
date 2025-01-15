@@ -6,6 +6,8 @@ class Kuribo : public Character
 {
 private:
 	std::vector<int> move_animation;
+	int animation_count;
+	float animation_time;
 
 public:
 	virtual void Initialize() override;
@@ -21,7 +23,7 @@ public:
 	void Set_Velocity(Vector2D velocity);
 
 private:
-	void Movement(float delta_second);
-	void AnimationControl(float delta_second);
+	void Movement(float delta_seconde);
+	void AnimationControl(float delta_seconde);
 };
 

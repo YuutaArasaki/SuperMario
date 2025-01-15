@@ -53,20 +53,20 @@ void Player::Initialize()
 
 void Player::Update(float delta_seconde)
 {
-	ePlayerState state;
-	
+	ePlayerState p_state;
+
 	if (next_state != ePlayerState::none)
 	{
 		player_state = PlayerStateFactory::Get((*this), next_state);
 		next_state = ePlayerState::none;
 	}
 
-	state = GetPlayerState();
+	p_state = GetPlayerState();
 
 	
 
 	//プレイヤーの状態で、処理を変える
-	switch (state)
+	switch (p_state)
 	{
 		case ePlayerState::idle:
 			image = move_animation[0];
@@ -89,20 +89,17 @@ void Player::Update(float delta_seconde)
 			break;
 	}
 
-	
-	if (state != jump)
+	if (is_ground == false)
+	{
+		g_velocity += D_GRAVITY / 444.0f;
+		velocity.y += g_velocity;
+	}
+
+	if (p_state != jump)
 	{
 		velocity.y = 3;
 	}
 
-	if (state == idle)
-	{
-		p_state = 1;
-	}
-	else
-	{
-		p_state = 0;
-	}
 	
 	Movement(delta_seconde);
 
@@ -150,7 +147,7 @@ void Player::Draw(const Vector2D& screen_offset) const
 	/*DrawFormatString(320, 240, GetColor(255, 0, 0), "X:%d", is_VectorX);
 	DrawFormatString(360, 240, GetColor(255, 0, 0), "Y:%d", is_VectorY);*/
 	DrawFormatString(320, 270, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
-	//DrawFormatString(320, 280, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
+	DrawFormatString(320, 290, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
 	//DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
 	//DrawFormatString(320, 320, GetColor(255, 0, 0), "ground:%d", filp_flag);
 	//DrawFormatString(400, 320, GetColor(255, 0, 0), "idle:%d", p_state);
@@ -166,20 +163,19 @@ void Player::OnHitCollision(GameObject* hit_object)
 
 	Vector2D dv = Vector2D(0, 0);
 
-	
 	Collision target = hit_object->GetCollision();
 
 	Vector2D t_location = hit_object->GetLocation();
 
 	float side[2][4];
 
-	//target1の矩形当たり判定の辺の座標
+	//Playerの矩形当たり判定の辺の座標
 	side[0][UP] = this->location.y - (this->collision.box_size.y / 2);
 	side[0][RIGHT] = this->location.x + (this->collision.box_size.x / 2);
 	side[0][DOWN] = this->location.y + (this->collision.box_size.y / 2);
 	side[0][LEFT] = this->location.x - (this->collision.box_size.x / 2);
 
-	//target2の矩形当たり判定の辺の座標
+	//hit_objectの矩形当たり判定の辺の座標
 	side[1][UP] = t_location.y - (target.box_size.y / 2);
 	side[1][RIGHT] = t_location.x + (target.box_size.x / 2);
 	side[1][DOWN] = t_location.y + (target.box_size.y / 2);
@@ -190,8 +186,12 @@ void Player::OnHitCollision(GameObject* hit_object)
 	{
 		jump_flag = false;
 		velocity.y = 0.0f;
- 		dv.y = (this->location.y - collision.box_size.y / 2) - (t_location.y + target.box_size.y / 2);
-		hit[0] = true;
+		if (target.object_type != eEnemy)
+		{
+			dv.y = (this->location.y - collision.box_size.y / 2) - (t_location.y + target.box_size.y / 2);
+			hit[0] = true;
+		}
+ 		
 	}
 	else
 	{
@@ -202,9 +202,11 @@ void Player::OnHitCollision(GameObject* hit_object)
 	//当たり判定（右辺）
 	if (HitCheckRight(hit_object, side) == true && is_VectorX == RIGHT)
 	{
-
-		dv.x = (this->location.x + collision.box_size.x / 2) - (t_location.x - target.box_size.x / 2);
-		hit[1] = true;
+		if (target.object_type != eEnemy)
+		{
+			dv.x = (this->location.x + collision.box_size.x / 2) - (t_location.x - target.box_size.x / 2);
+			hit[1] = true;
+		}
 		
 	}
 	else
@@ -215,9 +217,18 @@ void Player::OnHitCollision(GameObject* hit_object)
 	//当たり判定（下辺）
 	if (HitCheckDown(hit_object, side) == true && is_VectorY == DOWN)
 	{
-		jump_flag = true;
-		dv.y = (this->location.y + collision.box_size.y / 2) - (t_location.y - target.box_size.y / 2);
-		hit[2] = true;
+		if (target.object_type != eEnemy)
+		{
+			jump_flag = true;
+			dv.y = (this->location.y + collision.box_size.y / 2) - (t_location.y - target.box_size.y / 2);
+			hit[2] = true;
+		}
+		else if (hit_object->GetMobility() == true)
+		{
+			velocity.y = 0;
+			velocity.y += -20.0;
+		}
+	
 		if (target.object_type == eGround)
 		{
 			is_ground = true;
@@ -233,8 +244,12 @@ void Player::OnHitCollision(GameObject* hit_object)
 	//当たり判定（左辺）
 	if (HitCheckLeft(hit_object, side) == true && is_VectorX == LEFT)
 	{
-		dv.x = (this->location.x - collision.box_size.x / 2) - (t_location.x + target.box_size.x / 2);
-		hit[3] = true;
+		if (target.object_type != eEnemy)
+		{
+			dv.x = (this->location.x - collision.box_size.x / 2) - (t_location.x + target.box_size.x / 2);
+			hit[3] = true;
+		}
+		
 	}
 	else
 	{
@@ -287,7 +302,7 @@ void Player::Set_Velocity(Vector2D velocity)
 	this->velocity = velocity;
 }
 
-void Player::Set_Isground(bool flag)
+void Player::Set_IsGround(bool flag)
 {
 	is_ground = flag;
 }

@@ -10,7 +10,6 @@ private:
 	class GameObjectManager* objm;
 	std::vector<int> Cloudimage;
 	Player* p;
-	float x;
 	int stage_count;
 	int load_line;
 	int load_column;
@@ -25,6 +24,7 @@ public:
 
 private:
 	 void LoadStageMapCSV(int map_type, int x);		//マップ読み込み処理：引数：map_type = 読み込むマップの種類, x = 読み込みを開始する行
+	 void Stage_Update();
 	 void DeleteObject();
 };
 

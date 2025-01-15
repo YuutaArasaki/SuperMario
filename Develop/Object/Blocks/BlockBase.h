@@ -3,7 +3,6 @@
 
 class BlockBase : public GameObject
 {
-	
 
 public:
 	virtual void Initialize() override

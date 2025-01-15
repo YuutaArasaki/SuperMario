@@ -20,7 +20,7 @@ protected:
 
 private:
 	Vector2D screen_offset;
-	GameObjectManager* objm;
+	class GameObjectManager* objm;
 
 public:
 	SceneBase() : screen_offset(0.0f),objm(nullptr),image(0)
