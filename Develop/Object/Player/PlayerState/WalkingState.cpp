@@ -1,6 +1,6 @@
 #include "WalkingState.h"
 #include "../../../Utility/Vector2D.h"
-
+#include "DxLib.h"
 
 
 WalkingState::WalkingState(class Player* p)
@@ -33,11 +33,11 @@ void WalkingState::Update()
 		{
 			if (speed > -4)
 			{
-				speed += (float)-4 / 20;
+				speed += (float)4 / 60 * -1;
 			}
 
 			player->Filp_flag(TRUE);
-			player->Set_Velocity(Vector2D(speed, 0.0f));
+			player->Set_Velocity(Vector2D(speed, player->Get_Velocity().y));
 		}
 	
 	}
@@ -49,11 +49,11 @@ void WalkingState::Update()
 		{
 			if (speed < 4)
 			{
-				speed += (float)4 / 20;
+				speed += (float)4 / 60;
 			}
 
 			player->Filp_flag(FALSE);
-			player->Set_Velocity(Vector2D(speed, 0.0f));
+			player->Set_Velocity(Vector2D(speed, player->Get_Velocity().y));
 		}
 		
 	}
@@ -71,7 +71,7 @@ void WalkingState::Update()
 	{
 		if (speed > 0)
 		{
-			speed += (float)-4 / 20;
+			speed += (float)-4 / 30;
 			if (speed < 1.0e-6f)
 			{
 				speed = 0;
@@ -80,8 +80,8 @@ void WalkingState::Update()
 		}
 		else
 		{
-			speed += (float)4 / 20;
-			if (speed < -1.0e-6f)
+			speed += (float)4 / 30;
+			if (speed > -1.0e-6f)
 			{
 				speed = 0;
 				player->SetNextState(ePlayerState::idle);

@@ -158,8 +158,7 @@ public:
 
 	void CheckCollision(GameObject* target, GameObject* partner)
 	{
-		int is_VectorX = 0;
-		int is_VectorY = 0;
+		bool flag = false;
 
 		if (target == nullptr || partner == nullptr)
 		{
@@ -173,8 +172,8 @@ public:
 		if (tc.IsCheckHitTarget(pc.object_type) || pc.IsCheckHitTarget(tc.object_type))
 		{
 
-			tc.pivot += target->GetLocation();
-			pc.pivot += partner->GetLocation();
+			tc.pivot = target->GetLocation();
+			pc.pivot = partner->GetLocation();
 
 			if (tc.IsCheckHitCollision(tc, pc))
 			{

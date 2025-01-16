@@ -31,10 +31,13 @@ const State Character::GetState()
 	return state;
 }
 
-
+void Character::Set_Hitflag(bool flag)
+{
+	hit_flag = flag;
+}
 const bool Character::HitCheckUp(GameObject* hit_object, float side[][4])
 {
-	Vector2D diff;
+	Vector2D diff = 0.0f;
 
 	if (this->GetLocation().x >= hit_object->GetLocation().x)
 	{
@@ -45,7 +48,7 @@ const bool Character::HitCheckUp(GameObject* hit_object, float side[][4])
 	else if (this->GetLocation().x < hit_object->GetLocation().x)
 	{
 		diff.x = side[0][RIGHT] - side[1][LEFT];
-		diff.y = side[0][UP] - side[1][DOWN];
+		diff.y = side[1][DOWN] - side[0][UP];
 	}
 
 	if (diff.x < 0)
@@ -70,7 +73,7 @@ const bool Character::HitCheckUp(GameObject* hit_object, float side[][4])
 
 const bool	Character::HitCheckRight(GameObject* hit_object, float side[][4])
 {
-	Vector2D diff;
+	Vector2D diff = 0.0f;
 
 	if (this->GetLocation().y <= hit_object->GetLocation().y)
 	{
@@ -104,7 +107,7 @@ const bool	Character::HitCheckRight(GameObject* hit_object, float side[][4])
 
 const bool Character::HitCheckDown(GameObject* hit_object, float side[][4])
 {
-	Vector2D diff;
+	Vector2D diff = 0.0f;
 
 	if (this->GetLocation().x >= hit_object->GetLocation().x)
 	{
@@ -128,7 +131,7 @@ const bool Character::HitCheckDown(GameObject* hit_object, float side[][4])
 		diff.y *= -1;
 	}
 	
-	if (diff.x >= diff.y)
+	if (diff.x > diff.y)
 	{
 		return true;
 	}
@@ -142,25 +145,30 @@ const bool Character::HitCheckDown(GameObject* hit_object, float side[][4])
 
 const bool Character::HitCheckLeft(GameObject* hit_object, float side[][4])
 {
-	Vector2D diff;
+	Vector2D diff = 0.0f;
 
 	if (this->GetLocation().y <= hit_object->GetLocation().y)
 	{
+		float x = side[1][RIGHT];
+		float y = side[0][LEFT];
+
+		float x1 = side[0][DOWN];
+		float y1 = side[1][UP];
+
 		diff.x = side[1][RIGHT] - side[0][LEFT];
 		diff.y = side[0][DOWN] - side[1][UP];
-
 	}
 	else if (this->GetLocation().y > hit_object->GetLocation().y)
 	{
 		diff.x = side[1][RIGHT] - side[0][LEFT];
-		diff.y = side[0][UP] - side[1][DOWN];
+		diff.y = side[1][DOWN] - side[0][UP];
 	}
 
 	if (diff.x < 0)
 	{
 		diff.x *= -1;
 	}
-
+		
 	if (diff.y < 0)
 	{
 		diff.y *= -1;

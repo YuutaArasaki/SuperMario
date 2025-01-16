@@ -49,10 +49,14 @@ void Player::Initialize()
 	}
 
 	p_state = 0;
+
+	hit_flag = true;
 }
 
 void Player::Update(float delta_seconde)
 {
+	
+
 	ePlayerState p_state;
 
 	if (next_state != ePlayerState::none)
@@ -62,8 +66,6 @@ void Player::Update(float delta_seconde)
 	}
 
 	p_state = GetPlayerState();
-
-	
 
 	//プレイヤーの状態で、処理を変える
 	switch (p_state)
@@ -89,17 +91,21 @@ void Player::Update(float delta_seconde)
 			break;
 	}
 
-	if (is_ground == false)
+	
+	/*if (is_ground == false)
 	{
 		g_velocity += D_GRAVITY / 444.0f;
 		velocity.y += g_velocity;
-	}
+	}*/
 
-	if (p_state != jump)
+	
+
+	if (hit_flag == false && p_state != jump)
 	{
 		velocity.y = 3;
 	}
-
+	
+	hit_flag = false;
 	
 	Movement(delta_seconde);
 
@@ -130,7 +136,6 @@ void Player::Update(float delta_seconde)
 	{
 		is_VectorX = NONE;
 	}
-
 	
 }
 
@@ -146,10 +151,10 @@ void Player::Draw(const Vector2D& screen_offset) const
 
 	/*DrawFormatString(320, 240, GetColor(255, 0, 0), "X:%d", is_VectorX);
 	DrawFormatString(360, 240, GetColor(255, 0, 0), "Y:%d", is_VectorY);*/
-	DrawFormatString(320, 270, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
-	DrawFormatString(320, 290, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
-	//DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
-	//DrawFormatString(320, 320, GetColor(255, 0, 0), "ground:%d", filp_flag);
+	DrawFormatString(320, 240, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
+	DrawFormatString(320, 270, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
+	DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
+	DrawFormatString(320, 210, GetColor(255, 0, 0), "ground:%d", hit_flag);
 	//DrawFormatString(400, 320, GetColor(255, 0, 0), "idle:%d", p_state);
 }
 
@@ -160,6 +165,116 @@ void Player::Finalize()
 
 void Player::OnHitCollision(GameObject* hit_object)
 {
+	hit_flag = true;
+
+	//Vector2D diff, dv;
+	//diff = 0.0f;
+	//dv = 0.0f;
+	//Vector2D target_location = hit_object->GetLocation();
+	//Collision target_collision = hit_object->GetCollision();
+
+	////2点間の距離を求める
+	//diff = this->location - target_location;
+	//
+	//if (diff.x > 0)
+	//{
+	//	if (diff.y > 0)
+	//	{
+	//		dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
+	//		dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
+	//		
+	//		if (dv.x > dv.y)
+	//		{
+	//			this->location.y += dv.y;
+	//		}
+	//		else
+	//		{
+	//			this->location.x += dv.x;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
+	//		dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
+	//		
+	//		if (dv.x > dv.y)
+	//		{
+	//			if (target_collision.object_type != eEnemy)
+	//			{
+	//				this->location.y += -dv.y;
+	//				if (target_collision.object_type == eGround)
+	//				{
+	//					is_ground = true;
+	//					jump_flag = true;
+	//					g_velocity = 0;
+	//				}
+	//			}
+	//			else
+	//			{
+	//				if (hit_object->GetMobility() == true)
+	//				{
+	//					velocity.y = 0;
+	//					velocity.y += -20.0;
+	//				}
+	//			}
+	//		
+	//		}
+	//		else
+	//		{
+	//			this->location.x += dv.x;
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	if (diff.y > 0)
+	//	{
+	//		dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
+	//		dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
+
+	//		if (dv.x > dv.y)
+	//		{
+	//			this->location.y += dv.y;
+	//		}
+	//		else
+	//		{
+	//			this->location.x += -dv.x;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
+	//		dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
+
+	//		if (dv.x > dv.y)
+	//		{
+	//			if (target_collision.object_type != eEnemy)
+	//			{
+	//				this->location.y += -dv.y;
+
+	//				if (target_collision.object_type == eGround)
+	//				{
+	//					is_ground = true;
+	//					jump_flag = true;
+	//					g_velocity = 0;
+	//				}
+	//			}
+	//			else
+	//			{
+	//				if (hit_object->GetMobility() == true)
+	//				{
+	//					velocity.y = 0;
+	//					velocity.y += -20.0;
+	//				}
+	//			}
+	//			
+	//		}
+	//		else
+	//		{
+	//			this->location.x += -dv.x;
+	//		}
+	//	}
+	//}
 
 	Vector2D dv = Vector2D(0, 0);
 
@@ -181,7 +296,7 @@ void Player::OnHitCollision(GameObject* hit_object)
 	side[1][DOWN] = t_location.y + (target.box_size.y / 2);
 	side[1][LEFT] = t_location.x - (target.box_size.x / 2);
 
-	//当たり半手（上辺）
+	//当たり判定（上辺）
 	if (HitCheckUp(hit_object, side) == true && is_VectorY == UP)
 	{
 		jump_flag = false;
@@ -233,7 +348,7 @@ void Player::OnHitCollision(GameObject* hit_object)
 		{
 			is_ground = true;
 			g_velocity = 0.0f;
-			velocity.y = 0.0f;
+			velocity.y = 0;
 		}
 	}
 	else
@@ -256,8 +371,8 @@ void Player::OnHitCollision(GameObject* hit_object)
 		hit[3] = false;
 	}
 
-	// めり込んだ分だけ戻る
-  	this->location -= dv;
+	 //めり込んだ分だけ戻る
+  	this->location += dv * -1;
 
 }
 
@@ -307,6 +422,10 @@ void Player::Set_IsGround(bool flag)
 	is_ground = flag;
 }
 
+void Player::Set_Hitflag(bool flag)
+{
+	hit_flag = flag;
+}
 void Player::Movement(float delta_second)
 {
 	location += velocity * P_SPEED * delta_second;

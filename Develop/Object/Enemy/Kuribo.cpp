@@ -1,6 +1,8 @@
 #include "Kuribo.h"
 #include "../../Utility/ResourceManager.h"
 
+#define SPEED (30)
+
 void Kuribo::Initialize()
 {
 	ResourceManager* rm = ResourceManager::GetInstance();
@@ -17,13 +19,36 @@ void Kuribo::Initialize()
 	z_layer = 4;
 
 	//‰Â“®«‚ÌÝ’è
-	is_mobility = false;
+	is_mobility = true;
 
 	image = move_animation[0];
+
+	velocity.x = -1.0f;
+
+	animation_count = 0;
+
+	animation_time = 0;
+
+	state = live;
+
+	die_time = 0;
+
 }
 
 void Kuribo::Update(float delta_seconde)
 {
+	switch (state)
+	{
+	case live:
+		Movement(delta_seconde);
+		AnimationControl(delta_seconde);
+		break;
+
+	case die:
+		is_mobility = false;
+		image = move_animation[2];
+		break;
+	}
 
 }
 
@@ -44,6 +69,33 @@ void Kuribo::Finalize()
 
 void Kuribo::OnHitCollision(GameObject* hit_object)
 {
+	if (state != die)
+	{
+		Collision target = hit_object->GetCollision();
+
+		Vector2D t_location = hit_object->GetLocation();
+
+		float side[2][4];
+
+		
+		side[0][UP] = this->location.y - (this->collision.box_size.y / 2);
+		side[0][RIGHT] = this->location.x + (this->collision.box_size.x / 2);
+		side[0][DOWN] = this->location.y + (this->collision.box_size.y / 2);
+		side[0][LEFT] = this->location.x - (this->collision.box_size.x / 2);
+
+		
+		side[1][UP] = t_location.y - (target.box_size.y / 2);
+		side[1][RIGHT] = t_location.x + (target.box_size.x / 2);
+		side[1][DOWN] = t_location.y + (target.box_size.y / 2);
+		side[1][LEFT] = t_location.x - (target.box_size.x / 2);
+
+		
+		if (HitCheckUp(hit_object, side) == true && target.object_type == ePlayer)
+		{
+			velocity.y = 0.0f;
+			state = die;
+		}
+	}
 
 }
 
@@ -77,12 +129,28 @@ void Kuribo::Set_Velocity(Vector2D velocity)
 
 }
 
-void Kuribo::Movement(float delta_second)
+void Kuribo::Movement(float delta_seconde)
 {
-
+	location += velocity * SPEED * delta_seconde;
 }
 
-void Kuribo::AnimationControl(float delta_second)
+void Kuribo::AnimationControl(float delta_seconde)
 {
+	animation_time += delta_seconde;
+
+	if (animation_time >= 1.0f / 16.0f)
+	{
+		animation_time = 0.0f;
+
+		image = move_animation[animation_count];
+
+		animation_count++;
+
+		if (animation_count > 1)
+		{
+			animation_count = 0;
+		}
+
+	}
 
 }

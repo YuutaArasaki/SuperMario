@@ -45,6 +45,11 @@ void GameObject::OnHitCollision(GameObject* hit_object)
 
 }
 
+void GameObject::Set_Hitflag(bool flag)
+{
+	hit_flag = flag;
+}
+
 /// <summary>
 /// ˆÊ’uÀ•Wæ“¾ˆ—
 /// </summary>

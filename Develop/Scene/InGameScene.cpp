@@ -24,12 +24,11 @@ void InGameScene::Initialize()
 
 eSceneType InGameScene::Update(float delta_second)
 {
+	objm->HitCheck();
 
 	__super::Update(delta_second);
 
 	camera->Update();
-
-	objm->HitCheck();
 
 	DeleteObject();
 

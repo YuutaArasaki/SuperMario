@@ -14,6 +14,7 @@ protected:
 	unsigned char z_layer;
 	bool is_mobility;
 	bool filp_flag;
+	bool hit_flag;
 
 public:
 	virtual void Initialize();
@@ -21,6 +22,7 @@ public:
 	virtual void Draw(const Vector2D& screen_offset) const;
 	virtual void Finalize();
 	virtual void OnHitCollision(GameObject* hit_object);
+	virtual void Set_Hitflag(bool flag);
 	virtual const Vector2D& GetLocation() const;
 	void SetLocation(const Vector2D location);
 	virtual const Collision& GetCollision() const;

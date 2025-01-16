@@ -15,7 +15,7 @@ StoppedState::~StoppedState()
 void StoppedState::Initialize()
 {
 	input = InputManager::GetInstance();
-	player->Set_Velocity(Vector2D(0.0f, 0.0f));
+	player->Set_Velocity(Vector2D(0.0f,player->Get_Velocity().y));
 }
 
 void StoppedState::Update()

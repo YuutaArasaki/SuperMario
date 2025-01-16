@@ -52,6 +52,7 @@ public:
 	void Set_Velocity(Vector2D velocity_x);
 	void Set_IsGround(bool flag);
 	Vector2D Get_1Velocity();
+	void Set_Hitflag(bool flag) override;
 
 private:
 	void Movement(float delta_second);
