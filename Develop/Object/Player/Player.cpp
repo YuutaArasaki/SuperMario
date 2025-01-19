@@ -23,7 +23,7 @@ void Player::Initialize()
 	collision.hit_object_type.push_back(eObjectType::eEnemy);
 	collision.hit_object_type.push_back(eObjectType::eGround);
 	collision.hit_object_type.push_back(eObjectType::eItem);
-	collision.box_size = Vector2D(32,32);
+	collision.box_size = Vector2D(OBJECT_SIZE,OBJECT_SIZE);
 
 	//レイヤー設定
 	z_layer = 5;
@@ -50,13 +50,18 @@ void Player::Initialize()
 
 	p_state = 0;
 
+	/*
+	 オブジェクトにヒットしている = true
+	オブジェクトにヒットしていない = false
+	*/
 	hit_flag = true;
+
+	//横スクロール用カメラのポインタ
+	camera = nullptr;
 }
 
 void Player::Update(float delta_seconde)
 {
-	
-
 	ePlayerState p_state;
 
 	if (next_state != ePlayerState::none)
@@ -106,12 +111,24 @@ void Player::Update(float delta_seconde)
 	}
 	
 	hit_flag = false;
-	
+
 	Movement(delta_seconde);
-
+	
+	if (camera != nullptr)
+	{
+		float x = camera->Get_CameraLocation().x;
+		if (this->location.x - OBJECT_SIZE / 2 < x - D_WIN_MAX_X / 2)
+		{
+			if (velocity.x < 0)
+			{
+				velocity.x = 0;
+			}
+		}
+	}
+	
 	
 
-	if (velocity.y > 0)
+	/*if (velocity.y > 0)
 	{
 		is_VectorY = DOWN;
 	}
@@ -135,7 +152,7 @@ void Player::Update(float delta_seconde)
 	else
 	{
 		is_VectorX = NONE;
-	}
+	}*/
 	
 }
 
@@ -167,212 +184,214 @@ void Player::OnHitCollision(GameObject* hit_object)
 {
 	hit_flag = true;
 
-	//Vector2D diff, dv;
-	//diff = 0.0f;
-	//dv = 0.0f;
-	//Vector2D target_location = hit_object->GetLocation();
-	//Collision target_collision = hit_object->GetCollision();
+	Vector2D diff, dv;
+	diff = 0.0f;
+	dv = 0.0f;
+	Vector2D target_location = hit_object->GetLocation();
+	Collision target_collision = hit_object->GetCollision();
 
-	////2点間の距離を求める
-	//diff = this->location - target_location;
-	//
-	//if (diff.x > 0)
+	//2点間の距離を求める
+	diff = this->location - target_location;
+	
+	if (diff.x > 0)
+	{
+		if (diff.y > 0)
+		{
+			dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
+			dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
+			
+			if (dv.x > dv.y)
+			{
+				this->location.y += dv.y;
+			}
+			else
+			{
+				this->location.x += dv.x;
+			}
+		}
+		else
+		{
+			dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
+			dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
+			
+			if (dv.x > dv.y)
+			{
+				if (target_collision.object_type != eEnemy)
+				{
+					this->location.y += -dv.y;
+					if (target_collision.object_type == eGround)
+					{
+						is_ground = true;
+						jump_flag = true;
+						g_velocity = 0;
+						velocity.y = 0;
+					}
+				}
+				else
+				{
+					if (hit_object->GetMobility() == true)
+					{
+						velocity.y = 0;
+						velocity.y += -20.0;
+					}
+				}
+			
+			}
+			else
+			{
+				this->location.x += dv.x;
+			}
+		}
+	}
+	else
+	{
+		if (diff.y > 0)
+		{
+			dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
+			dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
+
+			if (dv.x > dv.y)
+			{
+				this->location.y += dv.y;
+			}
+			else
+			{
+				this->location.x += -dv.x;
+			}
+		}
+		else
+		{
+			dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
+			dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
+
+			if (dv.x > dv.y)
+			{
+				if (target_collision.object_type != eEnemy)
+				{
+					this->location.y += -dv.y;
+
+					if (target_collision.object_type == eGround)
+					{
+						is_ground = true;
+						jump_flag = true;
+						g_velocity = 0;
+						velocity.y = 0;
+					}
+				}
+				else
+				{
+					if (hit_object->GetMobility() == true)
+					{
+						velocity.y = 0;
+						velocity.y += -20.0;
+					}
+				}
+				
+			}
+			else
+			{
+				this->location.x += -dv.x;
+			}
+		}
+	}
+
+	//Vector2D dv = Vector2D(0, 0);
+
+	//Collision target = hit_object->GetCollision();
+
+	//Vector2D t_location = hit_object->GetLocation();
+
+	//float side[2][4];
+
+	////Playerの矩形当たり判定の辺の座標
+	//side[0][UP] = this->location.y - (this->collision.box_size.y / 2);
+	//side[0][RIGHT] = this->location.x + (this->collision.box_size.x / 2);
+	//side[0][DOWN] = this->location.y + (this->collision.box_size.y / 2);
+	//side[0][LEFT] = this->location.x - (this->collision.box_size.x / 2);
+
+	////hit_objectの矩形当たり判定の辺の座標
+	//side[1][UP] = t_location.y - (target.box_size.y / 2);
+	//side[1][RIGHT] = t_location.x + (target.box_size.x / 2);
+	//side[1][DOWN] = t_location.y + (target.box_size.y / 2);
+	//side[1][LEFT] = t_location.x - (target.box_size.x / 2);
+
+	////当たり判定（上辺）
+	//if (HitCheckUp(hit_object, side) == true && is_VectorY == UP)
 	//{
-	//	if (diff.y > 0)
+	//	jump_flag = false;
+	//	velocity.y = 0.0f;
+	//	if (target.object_type != eEnemy)
 	//	{
-	//		dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
-	//		dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
-	//		
-	//		if (dv.x > dv.y)
-	//		{
-	//			this->location.y += dv.y;
-	//		}
-	//		else
-	//		{
-	//			this->location.x += dv.x;
-	//		}
+	//		dv.y = (this->location.y - collision.box_size.y / 2) - (t_location.y + target.box_size.y / 2);
+	//		hit[0] = true;
 	//	}
-	//	else
+ //		
+	//}
+	//else
+	//{
+	//	hit[0] = false;
+	//}
+	//
+
+	////当たり判定（右辺）
+	//if (HitCheckRight(hit_object, side) == true && is_VectorX == RIGHT)
+	//{
+	//	if (target.object_type != eEnemy)
 	//	{
-	//		dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
-	//		dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
-	//		
-	//		if (dv.x > dv.y)
-	//		{
-	//			if (target_collision.object_type != eEnemy)
-	//			{
-	//				this->location.y += -dv.y;
-	//				if (target_collision.object_type == eGround)
-	//				{
-	//					is_ground = true;
-	//					jump_flag = true;
-	//					g_velocity = 0;
-	//				}
-	//			}
-	//			else
-	//			{
-	//				if (hit_object->GetMobility() == true)
-	//				{
-	//					velocity.y = 0;
-	//					velocity.y += -20.0;
-	//				}
-	//			}
-	//		
-	//		}
-	//		else
-	//		{
-	//			this->location.x += dv.x;
-	//		}
+	//		dv.x = (this->location.x + collision.box_size.x / 2) - (t_location.x - target.box_size.x / 2);
+	//		hit[1] = true;
+	//	}
+	//	
+	//}
+	//else
+	//{
+	//	hit[1] = false;
+	//}
+	//
+	////当たり判定（下辺）
+	//if (HitCheckDown(hit_object, side) == true && is_VectorY == DOWN)
+	//{
+	//	if (target.object_type != eEnemy)
+	//	{
+	//		jump_flag = true;
+	//		dv.y = (this->location.y + collision.box_size.y / 2) - (t_location.y - target.box_size.y / 2);
+	//		hit[2] = true;
+	//	}
+	//	else if (hit_object->GetMobility() == true)
+	//	{
+	//		velocity.y = 0;
+	//		velocity.y += -20.0;
+	//	}
+	//
+	//	if (target.object_type == eGround)
+	//	{
+	//		is_ground = true;
+	//		g_velocity = 0.0f;
+	//		velocity.y = 0;
 	//	}
 	//}
 	//else
 	//{
-	//	if (diff.y > 0)
+	//	hit[2] = false;
+	//}
+	//
+	////当たり判定（左辺）
+	//if (HitCheckLeft(hit_object, side) == true && is_VectorX == LEFT)
+	//{
+	//	if (target.object_type != eEnemy)
 	//	{
-	//		dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
-	//		dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
-
-	//		if (dv.x > dv.y)
-	//		{
-	//			this->location.y += dv.y;
-	//		}
-	//		else
-	//		{
-	//			this->location.x += -dv.x;
-	//		}
+	//		dv.x = (this->location.x - collision.box_size.x / 2) - (t_location.x + target.box_size.x / 2);
+	//		hit[3] = true;
 	//	}
-	//	else
-	//	{
-	//		dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
-	//		dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
-
-	//		if (dv.x > dv.y)
-	//		{
-	//			if (target_collision.object_type != eEnemy)
-	//			{
-	//				this->location.y += -dv.y;
-
-	//				if (target_collision.object_type == eGround)
-	//				{
-	//					is_ground = true;
-	//					jump_flag = true;
-	//					g_velocity = 0;
-	//				}
-	//			}
-	//			else
-	//			{
-	//				if (hit_object->GetMobility() == true)
-	//				{
-	//					velocity.y = 0;
-	//					velocity.y += -20.0;
-	//				}
-	//			}
-	//			
-	//		}
-	//		else
-	//		{
-	//			this->location.x += -dv.x;
-	//		}
-	//	}
+	//	
+	//}
+	//else
+	//{
+	//	hit[3] = false;
 	//}
 
-	Vector2D dv = Vector2D(0, 0);
-
-	Collision target = hit_object->GetCollision();
-
-	Vector2D t_location = hit_object->GetLocation();
-
-	float side[2][4];
-
-	//Playerの矩形当たり判定の辺の座標
-	side[0][UP] = this->location.y - (this->collision.box_size.y / 2);
-	side[0][RIGHT] = this->location.x + (this->collision.box_size.x / 2);
-	side[0][DOWN] = this->location.y + (this->collision.box_size.y / 2);
-	side[0][LEFT] = this->location.x - (this->collision.box_size.x / 2);
-
-	//hit_objectの矩形当たり判定の辺の座標
-	side[1][UP] = t_location.y - (target.box_size.y / 2);
-	side[1][RIGHT] = t_location.x + (target.box_size.x / 2);
-	side[1][DOWN] = t_location.y + (target.box_size.y / 2);
-	side[1][LEFT] = t_location.x - (target.box_size.x / 2);
-
-	//当たり判定（上辺）
-	if (HitCheckUp(hit_object, side) == true && is_VectorY == UP)
-	{
-		jump_flag = false;
-		velocity.y = 0.0f;
-		if (target.object_type != eEnemy)
-		{
-			dv.y = (this->location.y - collision.box_size.y / 2) - (t_location.y + target.box_size.y / 2);
-			hit[0] = true;
-		}
- 		
-	}
-	else
-	{
-		hit[0] = false;
-	}
-	
-
-	//当たり判定（右辺）
-	if (HitCheckRight(hit_object, side) == true && is_VectorX == RIGHT)
-	{
-		if (target.object_type != eEnemy)
-		{
-			dv.x = (this->location.x + collision.box_size.x / 2) - (t_location.x - target.box_size.x / 2);
-			hit[1] = true;
-		}
-		
-	}
-	else
-	{
-		hit[1] = false;
-	}
-	
-	//当たり判定（下辺）
-	if (HitCheckDown(hit_object, side) == true && is_VectorY == DOWN)
-	{
-		if (target.object_type != eEnemy)
-		{
-			jump_flag = true;
-			dv.y = (this->location.y + collision.box_size.y / 2) - (t_location.y - target.box_size.y / 2);
-			hit[2] = true;
-		}
-		else if (hit_object->GetMobility() == true)
-		{
-			velocity.y = 0;
-			velocity.y += -20.0;
-		}
-	
-		if (target.object_type == eGround)
-		{
-			is_ground = true;
-			g_velocity = 0.0f;
-			velocity.y = 0;
-		}
-	}
-	else
-	{
-		hit[2] = false;
-	}
-	
-	//当たり判定（左辺）
-	if (HitCheckLeft(hit_object, side) == true && is_VectorX == LEFT)
-	{
-		if (target.object_type != eEnemy)
-		{
-			dv.x = (this->location.x - collision.box_size.x / 2) - (t_location.x + target.box_size.x / 2);
-			hit[3] = true;
-		}
-		
-	}
-	else
-	{
-		hit[3] = false;
-	}
-
-	 //めり込んだ分だけ戻る
-  	this->location += dv * -1;
+	// //めり込んだ分だけ戻る
+ // 	this->location += dv * -1;
 
 }
 
@@ -422,15 +441,15 @@ void Player::Set_IsGround(bool flag)
 	is_ground = flag;
 }
 
-void Player::Set_Hitflag(bool flag)
-{
-	hit_flag = flag;
-}
 void Player::Movement(float delta_second)
 {
 	location += velocity * P_SPEED * delta_second;
 }
 
+void Player::Set_Camera(Camera* c)
+{
+	camera = c;
+}
 void Player::AnimationControl(float delta_second)
 {
 	//移動アニメーション
@@ -453,9 +472,4 @@ void Player::AnimationControl(float delta_second)
 
 }
 
-Vector2D Player::Get_1Velocity()
-{
-	Vector2D v1;
-	v1 = velocity / GetRefreshRate();
-	return v1;	
-}
+

@@ -1,6 +1,7 @@
 #pragma once
 #include "../Character.h"
 #include "PlayerState/PlayerStateBase.h"
+#include "../../Utility/Camera.h"
 #include <vector>
 
 enum ePlayerState
@@ -30,6 +31,7 @@ private:
 	float x;
 	bool hit[4];
 	int p_state;
+	class Camera* camera;
 
 public:
 	bool jump_flag;
@@ -52,7 +54,7 @@ public:
 	void Set_Velocity(Vector2D velocity_x);
 	void Set_IsGround(bool flag);
 	Vector2D Get_1Velocity();
-	void Set_Hitflag(bool flag) override;
+	void Set_Camera(Camera* c);
 
 private:
 	void Movement(float delta_second);

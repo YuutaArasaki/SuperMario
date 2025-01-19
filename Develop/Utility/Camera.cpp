@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera() : player(nullptr), camera_location(0), pivot_loaction(D_WIN_MAX_X / 2)
+Camera::Camera() : player(nullptr), camera_location(D_WIN_MAX_X / 2), offset(0)
 {
 	
 }
@@ -15,10 +15,11 @@ void Camera::Update()
 	//Playerが画面中央よりも前にいるとカメラの位置を更新する
 	if (player != nullptr)
 	{
-		if (player->GetLocation().x > pivot_loaction)
+		if (player->GetLocation().x > camera_location.x)
 		{
 			//カメラのX座標更新
-			camera_location.x = player->GetLocation().x - (D_WIN_MAX_X / 2);
+			camera_location.x = player->GetLocation().x;
+			offset.x = player->GetLocation().x - (D_WIN_MAX_X / 2);
 
 			//左にスクロールできないように基準座標を変える
 			/*pivot_loaction = player->GetLocation().x;*/
@@ -33,9 +34,9 @@ void Camera::Finalize()
 	delete player;
 }
 
-void Camera::Set_CameraLocation(Vector2D location)
+Vector2D Camera::Get_Offset()
 {
-	camera_location = location;
+	return offset;
 }
 
 Vector2D Camera::Get_CameraLocation()

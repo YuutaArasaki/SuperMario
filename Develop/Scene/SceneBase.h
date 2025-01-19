@@ -61,7 +61,7 @@ public:
 		{
 			for (GameObject* obj : game->GetObjectsList())
 			{
-				obj->Draw(camera->Get_CameraLocation());
+				obj->Draw(camera->Get_Offset());
 			}
 		}
 	}

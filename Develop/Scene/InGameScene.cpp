@@ -14,7 +14,6 @@
 void InGameScene::Initialize()
 {
 	p = nullptr;
-	load_line = 0;
 	ResourceManager* rm = ResourceManager::GetInstance();
 	objm = GameObjectManager::GetInstance();
 	Cloudimage = rm->GetImageResource("Resource/Images/cloud.png", 6, 3, 2, 32, 32);
@@ -124,6 +123,7 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
 			p = objm->CreateGameObject<Player>(generate_location);
 			camera->Set_Player(p);
+			p->Set_Camera(camera);
 			objm->CreateGameObject<Sky>(generate_location);
 			x++;
 		}
@@ -179,19 +179,17 @@ void InGameScene::LoadStageMapCSV(int map_type, int x)
 
 void InGameScene::DeleteObject()
 {
-	Vector2D camera_location = camera->Get_CameraLocation();
+	float offset = camera->Get_Offset().x;
 	std::vector<GameObject*> object_list = objm->GetObjectsList();
 	
 	if (!object_list.empty())
 	{
 		for (int i = 0; i < object_list.size(); i++)
 		{
-			int x = (object_list[i]->GetLocation().x + OBJECT_SIZE / 2) - camera_location.x;
+			int x = (object_list[i]->GetLocation().x + OBJECT_SIZE / 2) - offset;
 			if (0 >= x)
 			{
  				objm->DestroyGameObject(object_list[i]);
-				/*load_line++;
-				LoadStageMapCSV(load_line, 0);*/
 			}
 		}
 
