@@ -30,12 +30,12 @@ private:
 	eSide is_VectorY;
 	float x;
 	bool hit[4];
-	int p_state;
+	ePlayerState p_state;
 	class Camera* camera;
 
 public:
 	bool jump_flag;
-
+	bool slide_flag;
 	int animation_num[3] = { 1, 2, 3};	//アニメーションの順番
 
 public:

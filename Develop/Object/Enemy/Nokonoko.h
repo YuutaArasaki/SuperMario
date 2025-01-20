@@ -1,5 +1,8 @@
 #pragma once
-class Nokonoko
+#include "../Character.h"
+
+class Nokonoko : public Character
 {
+
 };
 

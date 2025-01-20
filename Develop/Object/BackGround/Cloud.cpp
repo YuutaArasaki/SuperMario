@@ -20,7 +20,7 @@ void Cloud::Initialize()
 	{
 		if (Cloudimage[i] == NULL)
 		{
-			throw ("”wŒi(‹ó)‚ª“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½\n");
+			throw ("”wŒi(‹ó1)‚ª“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½\n");
 		}
 	}
 }
@@ -57,6 +57,7 @@ const bool Cloud::GetMobility() const
 
 void Cloud::Set_Cloudimage(int number)
 {
+	
 	switch (number)
 	{
 	case 0:
@@ -83,8 +84,7 @@ void Cloud::Set_Cloudimage(int number)
 		image = Cloudimage[5];
 		break;
 
-	default:
-		break;
+		default:
+		 break;
 	}
-
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "../Character.h"
 #include "../../Utility/Collision.h"
+#include "../../Utility/Camera.h"
 
 class Kuribo : public Character
 {
@@ -8,6 +9,7 @@ private:
 	std::vector<int> move_animation;
 	int animation_count;
 	float animation_time;
+	Camera* camera;
 
 public:
 	virtual void Initialize() override;
@@ -21,6 +23,7 @@ public:
 	virtual const bool GetMobility() const override;
 	void Filp_flag(bool flag);
 	void Set_Velocity(Vector2D velocity);
+	void Set_Camera(Camera* c);
 
 private:
 	void Movement(float delta_seconde);

@@ -39,17 +39,18 @@ void JumpingState::Update()
 	}
 
 	//d—Í‘¬“x‚ÌŒvZ
-	if (j_velocity.y < 0)
+	/*if (j_velocity.y < 0)
 	{
 		g_velocity += D_GRAVITY / 444.0f;
 		j_velocity.y += g_velocity;
 		player->Set_Velocity(j_velocity);
 	}
-	else if (j_velocity.y >= 0 && j_velocity.y <= 10)
+	else*/ if (j_velocity.y >= 0 && j_velocity.y < 12)
 	{
 		j_velocity.y += 2;
 		player->Set_Velocity(j_velocity);
 	}
+	
 
 	if (this->player->jump_flag == true)
 	{

@@ -48,8 +48,6 @@ void Player::Initialize()
 		hit[i] = 0;
 	}
 
-	p_state = 0;
-
 	/*
 	 オブジェクトにヒットしている = true
 	オブジェクトにヒットしていない = false
@@ -58,11 +56,15 @@ void Player::Initialize()
 
 	//横スクロール用カメラのポインタ
 	camera = nullptr;
+
+	slide_flag = false;
+
 }
 
 void Player::Update(float delta_seconde)
 {
-	ePlayerState p_state;
+	//ePlayerState p_state;
+	slide_flag = false;
 
 	if (next_state != ePlayerState::none)
 	{
@@ -97,11 +99,11 @@ void Player::Update(float delta_seconde)
 	}
 
 	
-	/*if (is_ground == false)
+	if (is_ground == false)
 	{
 		g_velocity += D_GRAVITY / 444.0f;
 		velocity.y += g_velocity;
-	}*/
+	}
 
 	
 
@@ -111,22 +113,20 @@ void Player::Update(float delta_seconde)
 	}
 	
 	hit_flag = false;
-
-	Movement(delta_seconde);
 	
 	if (camera != nullptr)
 	{
 		float x = camera->Get_CameraLocation().x;
 		if (this->location.x - OBJECT_SIZE / 2 < x - D_WIN_MAX_X / 2)
 		{
-			if (velocity.x < 0)
+			if (velocity.x < 1.0e-6f)
 			{
 				velocity.x = 0;
 			}
 		}
 	}
 	
-	
+	Movement(delta_seconde);
 
 	/*if (velocity.y > 0)
 	{
@@ -171,7 +171,7 @@ void Player::Draw(const Vector2D& screen_offset) const
 	DrawFormatString(320, 240, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
 	DrawFormatString(320, 270, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
 	DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
-	DrawFormatString(320, 210, GetColor(255, 0, 0), "ground:%d", hit_flag);
+	DrawFormatString(320, 210, GetColor(255, 0, 0), "state:%d", filp_flag);
 	//DrawFormatString(400, 320, GetColor(255, 0, 0), "idle:%d", p_state);
 }
 
@@ -460,6 +460,11 @@ void Player::AnimationControl(float delta_second)
 		animation_time = 0.0f;
 	
 		image = move_animation[animation_num[animation_count]];
+
+		if (slide_flag == true)
+		{
+			image = move_animation[4];
+		}
 
 		animation_count++;
 		

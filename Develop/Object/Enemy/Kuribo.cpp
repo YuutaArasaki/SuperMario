@@ -37,11 +37,16 @@ void Kuribo::Initialize()
 
 void Kuribo::Update(float delta_seconde)
 {
+	float x = camera->Get_CameraLocation().x + D_WIN_MAX_X / 2;
+
 	switch (state)
 	{
 	case live:
-		Movement(delta_seconde);
-		AnimationControl(delta_seconde);
+		if (location.x - OBJECT_SIZE / 2 < x)
+		{
+			Movement(delta_seconde);
+			AnimationControl(delta_seconde);
+		}
 		break;
 
 	case die:
@@ -129,6 +134,11 @@ void Kuribo::Set_Velocity(Vector2D velocity)
 
 }
 
+void Kuribo::Set_Camera(Camera* c)
+{
+	camera = c;
+}
+
 void Kuribo::Movement(float delta_seconde)
 {
 	location += velocity * SPEED * delta_seconde;
@@ -138,7 +148,7 @@ void Kuribo::AnimationControl(float delta_seconde)
 {
 	animation_time += delta_seconde;
 
-	if (animation_time >= 1.0f / 16.0f)
+	if (animation_time >= 0.5)
 	{
 		animation_time = 0.0f;
 

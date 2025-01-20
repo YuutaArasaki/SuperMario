@@ -15,7 +15,7 @@ void Camera::Update()
 	//Playerが画面中央よりも前にいるとカメラの位置を更新する
 	if (player != nullptr)
 	{
-		if (player->GetLocation().x > camera_location.x)
+		if (player->GetLocation().x > 320/*camera_location.x*/)
 		{
 			//カメラのX座標更新
 			camera_location.x = player->GetLocation().x;
