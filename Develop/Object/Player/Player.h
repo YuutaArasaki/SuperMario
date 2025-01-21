@@ -12,6 +12,13 @@ enum ePlayerState
 	none
 };
 
+enum ePlayer_Level
+{
+	Small,
+	Big,
+	Fire
+};
+
 class Player : public Character
 {
 private:
@@ -49,12 +56,13 @@ public:
 	virtual const bool GetMobility() const override;
 	ePlayerState GetPlayerState() const;
 	void SetNextState(ePlayerState next_state);
-	void Filp_flag(bool flag);
+	void SetFilp_flag(bool flag);
+	bool GetFilp_flag();
 	Vector2D Get_Velocity();
 	void Set_Velocity(Vector2D velocity_x);
 	void Set_IsGround(bool flag);
-	Vector2D Get_1Velocity();
 	void Set_Camera(Camera* c);
+	void Set_SlideFlag(bool flag);
 
 private:
 	void Movement(float delta_second);

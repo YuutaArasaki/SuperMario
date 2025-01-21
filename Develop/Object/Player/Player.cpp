@@ -31,22 +31,17 @@ void Player::Initialize()
 	//可動性の設定
 	is_mobility = true;
 
+	//アニメーション画像の設定
 	image = move_animation[0];
 
+	//画像反転フラグの設定
 	filp_flag = FALSE;	
 
+	//地面に着地しているか判定フラグの設定
 	is_ground = false;
 
+	//ジャンプできる状態かの判定フラグ
 	jump_flag = true;
-
-	is_VectorX = NONE;
-
-	is_VectorY = NONE;
-
-	for (int i = 0; i < 4; i++)
-	{
-		hit[i] = 0;
-	}
 
 	/*
 	 オブジェクトにヒットしている = true
@@ -57,6 +52,7 @@ void Player::Initialize()
 	//横スクロール用カメラのポインタ
 	camera = nullptr;
 
+	//方
 	slide_flag = false;
 
 }
@@ -171,7 +167,7 @@ void Player::Draw(const Vector2D& screen_offset) const
 	DrawFormatString(320, 240, GetColor(255, 0, 0), "vX:%f,vY:%f", velocity.x, velocity.y);
 	DrawFormatString(320, 270, GetColor(255, 0, 0), "X:%f,Y:%f", location.x,location.y);
 	DrawFormatString(320, 300, GetColor(255, 0, 0), "U:%d R:%d D:%d L:%d",hit[0],hit[1],hit[2],hit[3]);
-	DrawFormatString(320, 210, GetColor(255, 0, 0), "state:%d", filp_flag);
+	DrawFormatString(320, 210, GetColor(255, 0, 0), "state:%d", p_state);
 	//DrawFormatString(400, 320, GetColor(255, 0, 0), "idle:%d", p_state);
 }
 
@@ -185,10 +181,14 @@ void Player::OnHitCollision(GameObject* hit_object)
 	hit_flag = true;
 
 	Vector2D diff, dv;
+	Vector2D target_boxsize, this_boxsize;
 	diff = 0.0f;
 	dv = 0.0f;
 	Vector2D target_location = hit_object->GetLocation();
-	Collision target_collision = hit_object->GetCollision();
+
+	target_boxsize = hit_object->GetCollision().box_size;
+	this_boxsize = this->collision.box_size;
+	
 
 	//2点間の距離を求める
 	diff = this->location - target_location;
@@ -197,8 +197,8 @@ void Player::OnHitCollision(GameObject* hit_object)
 	{
 		if (diff.y > 0)
 		{
-			dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
-			dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
+			dv.x = (target_location.x + target_boxsize.x / 2) - (this->location.x - this_boxsize.x / 2);
+			dv.y = (target_location.y + target_boxsize.y / 2) - (this->location.y - this_boxsize.y / 2);
 			
 			if (dv.x > dv.y)
 			{
@@ -211,15 +211,15 @@ void Player::OnHitCollision(GameObject* hit_object)
 		}
 		else
 		{
-			dv.x = (target_location.x + OBJECT_SIZE / 2) - (this->location.x - OBJECT_SIZE / 2);
-			dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
+			dv.x = (target_location.x + target_boxsize.x / 2) - (this->location.x - this_boxsize.x / 2);
+			dv.y = (this->location.y + this_boxsize.y / 2) - (target_location.y - target_boxsize.y / 2);
 			
 			if (dv.x > dv.y)
 			{
-				if (target_collision.object_type != eEnemy)
+				if (hit_object->GetCollision().object_type != eEnemy)
 				{
 					this->location.y += -dv.y;
-					if (target_collision.object_type == eGround)
+					if (hit_object->GetCollision().object_type == eGround)
 					{
 						is_ground = true;
 						jump_flag = true;
@@ -247,8 +247,8 @@ void Player::OnHitCollision(GameObject* hit_object)
 	{
 		if (diff.y > 0)
 		{
-			dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
-			dv.y = (target_location.y + OBJECT_SIZE / 2) - (this->location.y - OBJECT_SIZE / 2);
+			dv.x = (this->location.x + this_boxsize.x / 2) - (target_location.x - target_boxsize.x / 2);
+			dv.y = (target_location.y + target_boxsize.y / 2) - (this->location.y - this_boxsize.y / 2);
 
 			if (dv.x > dv.y)
 			{
@@ -261,16 +261,16 @@ void Player::OnHitCollision(GameObject* hit_object)
 		}
 		else
 		{
-			dv.x = (this->location.x + OBJECT_SIZE / 2) - (target_location.x - OBJECT_SIZE / 2);
-			dv.y = (this->location.y + OBJECT_SIZE / 2) - (target_location.y - OBJECT_SIZE / 2);
+			dv.x = (this->location.x + this_boxsize.x / 2) - (target_location.x - target_boxsize.x / 2);
+			dv.y = (this->location.y + this_boxsize.y / 2) - (target_location.y - target_boxsize.y / 2);
 
 			if (dv.x > dv.y)
 			{
-				if (target_collision.object_type != eEnemy)
+				if (hit_object->GetCollision().object_type != eEnemy)
 				{
 					this->location.y += -dv.y;
 
-					if (target_collision.object_type == eGround)
+					if (hit_object->GetCollision().object_type == eGround)
 					{
 						is_ground = true;
 						jump_flag = true;
@@ -421,9 +421,14 @@ void Player::SetNextState(ePlayerState next_state)
 	this->next_state = next_state;
 }
 
-void Player::Filp_flag(bool flag)
+void Player::SetFilp_flag(bool flag)
 {
 	filp_flag = flag;
+}
+
+bool Player::GetFilp_flag()
+{
+	return filp_flag;
 }
 
 Vector2D Player::Get_Velocity()
@@ -441,15 +446,21 @@ void Player::Set_IsGround(bool flag)
 	is_ground = flag;
 }
 
+void Player::Set_Camera(Camera* c)
+{
+	camera = c;
+}
+
+void Player::Set_SlideFlag(bool flag)
+{
+	slide_flag = flag;
+}
+
 void Player::Movement(float delta_second)
 {
 	location += velocity * P_SPEED * delta_second;
 }
 
-void Player::Set_Camera(Camera* c)
-{
-	camera = c;
-}
 void Player::AnimationControl(float delta_second)
 {
 	//移動アニメーション

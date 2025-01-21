@@ -4,6 +4,7 @@
 enum State
 {
 	live,
+	down,
 	die
 };
 class Character : public GameObject
@@ -14,6 +15,7 @@ protected:
 	bool on_ground;
 	State state;
 	float die_time;
+
 
 public:
 	virtual void OnHitCollision(GameObject* hit_object) override;

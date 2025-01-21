@@ -36,13 +36,13 @@ void WalkingState::Update()
 	{
 		if (input_d != eInputState::Pressed && input_d != eInputState::Held)
 		{
-			if (speed > 0)
+			if (speed >= 0)
 			{
-				player->slide_flag = true;
+				player->Set_SlideFlag(TRUE);
 			}
 			else
 			{
-				player->Filp_flag(TRUE);
+				player->SetFilp_flag(TRUE);
 			}
 
 			if (speed > -4)
@@ -59,13 +59,14 @@ void WalkingState::Update()
 	{
 		if (input_a != eInputState::Pressed && input_a != eInputState::Held)
 		{
-			if (speed < 0)
+			
+			if (speed <= 0)
 			{
-				player->slide_flag = true;
+				player->Set_SlideFlag(TRUE);
 			}
 			else
 			{
-				player->Filp_flag(FALSE);
+				player->SetFilp_flag(FALSE);
 			}
 
 			if (speed < 4)
