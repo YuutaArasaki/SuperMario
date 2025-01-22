@@ -1,6 +1,6 @@
 #include "Ground.h"
 #include "DxLib.h"
-
+#include "../GameObject.h"
 
 void Ground::Initialize()
 {
@@ -20,6 +20,7 @@ void Ground::Initialize()
 
 	is_mobility = false;
 
+	player = nullptr;
 
 }
 
@@ -30,7 +31,15 @@ void Ground::Update(float delta_seconde)
 
 void Ground::Draw(const Vector2D& screen_offset) const
 {
-	__super::Draw(screen_offset);
+
+	float x = camera->Get_CameraLocation().x + D_WIN_MAX_X / 2;
+	
+	 
+	if (this->location.x - (OBJECT_SIZE / 2) < x)
+	{
+		__super::Draw(screen_offset);
+	}
+
 	Vector2D ul = location - (collision.box_size / 2);
 	Vector2D br = location + (collision.box_size / 2);
 	DrawBoxAA(ul.x - screen_offset.x, ul.y, br.x - screen_offset.x, br.y, GetColor(255, 0, 0), FALSE);
@@ -64,4 +73,9 @@ const unsigned char Ground::GetZLayer() const
 const bool Ground::GetMobility() const
 {
 	return is_mobility;
+}
+
+void Ground::Set_Camera(Camera* c)
+{
+	camera = c;
 }

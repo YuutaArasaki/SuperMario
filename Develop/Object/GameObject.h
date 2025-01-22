@@ -1,4 +1,5 @@
 #pragma once
+#include "../Utility/ProjectConfig.h"
 #include "../Utility/Vector2D.h"
 #include "../Utility/Collision.h"
 
@@ -15,6 +16,7 @@ protected:
 	bool is_mobility;
 	bool filp_flag;
 	bool hit_flag;
+	class Player* player;
 
 public:
 	virtual void Initialize();
@@ -28,6 +30,5 @@ public:
 	virtual const Collision& GetCollision() const;
 	virtual const unsigned char GetZLayer() const;
 	virtual const bool GetMobility() const;
-
 };
 

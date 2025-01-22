@@ -124,6 +124,11 @@ const  bool Kuribo::GetMobility() const
 	return is_mobility;
 }
 
+void Kuribo::Set_Player(Player* p)
+{
+	player = p;
+}
+
 void Kuribo::Filp_flag(bool flag)
 {
 

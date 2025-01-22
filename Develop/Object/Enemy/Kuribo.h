@@ -10,6 +10,7 @@ private:
 	int animation_count;
 	float animation_time;
 	Camera* camera;
+	class Player* player;
 
 public:
 	virtual void Initialize() override;
@@ -24,7 +25,7 @@ public:
 	void Filp_flag(bool flag);
 	void Set_Velocity(Vector2D velocity);
 	void Set_Camera(Camera* c);
-
+	void Set_Player(Player* p);
 private:
 	void Movement(float delta_seconde);
 	void AnimationControl(float delta_seconde);

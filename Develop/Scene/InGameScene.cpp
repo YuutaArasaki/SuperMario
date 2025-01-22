@@ -18,7 +18,6 @@ void InGameScene::Initialize()
 	ResourceManager* rm = ResourceManager::GetInstance();
 	objm = GameObjectManager::GetInstance();
 	Cloudimage = rm->GetImageResource("Resource/Images/cloud.png", 6, 3, 2, 32, 32);
-	stage_count = 1;
 	LoadStageMapCSV();
 }
 
@@ -33,14 +32,15 @@ eSceneType InGameScene::Update(float delta_second)
 	DeleteObject();
 
 	Draw();
-
+	
 
 	return GetNowSceneType();
 }
 
 void InGameScene::Draw() const
 {
-	DrawFormatString(320,240,GetColor(255, 0, 0), "%f", p->GetLocation().x);
+	LoadBackGroundCSV();
+
 	__super::Draw();
 }
 
@@ -83,7 +83,7 @@ void InGameScene::LoadStageMapCSV()
 
 	FILE* fp = NULL;
 
-	std::string file_name = "Resource/Map/Map1.csv";
+	std::string file_name = "Resource/Map/Stage_Object.csv";
 
 
 	// 指定されたファイルを開く
@@ -97,6 +97,7 @@ void InGameScene::LoadStageMapCSV()
 
 	int x = 0;
 	int y = 0;
+	Ground* ground = nullptr;
 	Cloud* cloud = nullptr;
 	Kuribo* k = nullptr;
 	Nokonoko* n = nullptr;
@@ -114,24 +115,25 @@ void InGameScene::LoadStageMapCSV()
 			break;
 		}
 		//抽出した文字が'P'ならPlaeyrを描画する
-		else if (c == 'P')
+		else if (c == 'M')
 		{
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
 			p = objm->CreateGameObject<Player>(generate_location);
 			camera->Set_Player(p);
 			p->Set_Camera(camera);
-			objm->CreateGameObject<Sky>(generate_location);
+
 			x++;
 		}
 		// 抽出した文字がGなら、地面を生成
 		else if (c == 'G')
 		{
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
-			objm->CreateGameObject<Ground>(generate_location);
+			ground = objm->CreateGameObject<Ground>(generate_location);
+			ground->Set_Camera(camera);
 			x++;
 		}
 		//抽出した文字がKなら、クリボー（敵）を生成する
-		else if (c == 'K')
+		else if (c == 'C')
 		{
 			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
 			k = objm->CreateGameObject<Kuribo>(generate_location);
@@ -146,50 +148,56 @@ void InGameScene::LoadStageMapCSV()
 			n->Set_Camera(camera);
 			x++;
 		}
-		// 抽出した文字がSなら空（背景）を生成する
-		else if (c == 'S')
+		else if (c == 'B')
 		{
-			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
-			objm->CreateGameObject<Sky>(generate_location);
-			x++;
+			fgetc(fp);
+			switch (c)
+			{
+			case '?':
+				x++;
+				break;
+
+			case '0':
+				x++;
+				break;
+
+			case '1':
+				x++;
+				break;
+
+			case 'H':
+				x++;
+				break;
+			}
 		}
-		//抽出した文字がCなら雲（背景）を生成する
-		else if (c == 'C')
+		else if (c == 'P')
 		{
-			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
-			cloud = objm->CreateGameObject<Cloud>(generate_location);
-			c = fgetc(fp);
-			if (c == '0')
+			fgetc(fp);
+
+			switch (c)
 			{
-				cloud->Set_Cloudimage(0);
+			case 't':
 				x++;
+				break;
+
+			case '1':
+				x++;
+				break;
 			}
-			else if (c == '1')
+		}
+		else if (c == 'F')
+		{
+			fgetc(fp);
+			switch (c)
 			{
-				cloud->Set_Cloudimage(1);
+			case '1':
 				x++;
-			}
-			else if (c == '2')
-			{
-				cloud->Set_Cloudimage(2);
+				break;
+
+			case 't':
 				x++;
+				break;
 			}
-			else if (c == '3')
-			{
-				cloud->Set_Cloudimage(3);
-				x++;
-			}
-			else if (c == '4')
-			{
-				cloud->Set_Cloudimage(4);
-				x++;
-			}
-			else if (c == '5')
-			{
-				cloud->Set_Cloudimage(5);
-				x++;
-			}
-			
 		}
 		//抽出した文字が0なら何も生成せず、次の文字を見る
 		else if (c == '0')
@@ -203,19 +211,25 @@ void InGameScene::LoadStageMapCSV()
 			y++;
 		}
 
+		
+		
 	}
 
 	// 開いたファイルを閉じる
 	fclose(fp);
 }
 
-void InGameScene::LoadBackGroundCSV()
+void InGameScene::LoadBackGroundCSV() const
 {
 
 	FILE* fp = NULL;
 
 	std::string file_name = "Resource/Map/BackGround.csv";
-
+	int sky_image = LoadGraph("Resource/Images/sora.png");
+	int mountain_image[5] = { 0,0,0,0,0, };
+	mountain_image[0] = LoadGraph("Resource/Images/mountain_up.png");
+	mountain_image[1] = LoadGraph("Resource/Images/mountain_left.png");
+	mountain_image[2] = LoadGraph("Resource/Images/mountain_.png");
 
 	// 指定されたファイルを開く
 	errno_t result = fopen_s(&fp, file_name.c_str(), "r");
@@ -229,11 +243,12 @@ void InGameScene::LoadBackGroundCSV()
 	int x = 0;
 	int y = 0;
 	Cloud* cloud = nullptr;
-	
 
 	// ファイル内の文字を確認していく
 	while (true)
 	{
+		Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
+		float Dx = camera->Get_CameraLocation().x + 288;//D_WIN_MAX_X / 2;
 
 		// ファイルから1文字抽出する
 		int c = fgetc(fp);
@@ -246,50 +261,68 @@ void InGameScene::LoadBackGroundCSV()
 		// 抽出した文字がSなら空（背景）を生成する
 		if (c == '0')
 		{
-			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
-			objm->CreateGameObject<Sky>(generate_location);
+			if (generate_location.x - OBJECT_SIZE / 2 < Dx)
+			{
+				DrawRotaGraphF(generate_location.x, generate_location.y, 1.0, 0, sky_image, TRUE);
+			}
 			x++;
 		}
 		//抽出した文字がCなら雲（背景）を生成する
 		else if (c == 'C')
 		{
-			Vector2D generate_location = (Vector2D((float)x, (float)y) * OBJECT_SIZE) + (OBJECT_SIZE / 2);
-			cloud = objm->CreateGameObject<Cloud>(generate_location);
 			c = fgetc(fp);
 			if (c == '0')
 			{
-				cloud->Set_Cloudimage(0);
+				if (generate_location.x - OBJECT_SIZE / 2 < Dx)
+				{
+					DrawRotaGraphF(generate_location.x, generate_location.y, 1.0, 0, Cloudimage[0], TRUE);
+				}
 				x++;
 			}
 			else if (c == '1')
 			{
-				cloud->Set_Cloudimage(1);
+				if (generate_location.x - OBJECT_SIZE / 2 < Dx)
+				{
+					DrawRotaGraphF(generate_location.x, generate_location.y, 1.0, 0, Cloudimage[1], TRUE);
+				}
 				x++;
 			}
 			else if (c == '2')
 			{
-				cloud->Set_Cloudimage(2);
+				if (generate_location.x - OBJECT_SIZE / 2 < Dx)
+				{
+					DrawRotaGraphF(generate_location.x, generate_location.y, 1.0, 0, Cloudimage[2], TRUE);
+				}
 				x++;
 			}
 			else if (c == '3')
 			{
-				cloud->Set_Cloudimage(3);
+				if (generate_location.x - OBJECT_SIZE / 2 < Dx)
+				{
+					DrawRotaGraphF(generate_location.x, generate_location.y, 1.0, 0, Cloudimage[3], TRUE);
+				}
 				x++;
 			}
 			else if (c == '4')
 			{
-				cloud->Set_Cloudimage(4);
+				if (generate_location.x - OBJECT_SIZE / 2 < Dx)
+				{
+					DrawRotaGraphF(generate_location.x, generate_location.y, 1.0, 0, Cloudimage[4], TRUE);
+				}
 				x++;
 			}
 			else if (c == '5')
 			{
-				cloud->Set_Cloudimage(5);
+				if (generate_location.x - OBJECT_SIZE / 2 < Dx)
+				{
+					DrawRotaGraphF(generate_location.x, generate_location.y, 1.0, 0, Cloudimage[5], TRUE);
+				}
 				x++;
 			}
 
 		}
-		//抽出した文字が0なら何も生成せず、次の文字を見る
-		else if (c == '0')
+		//抽出した文字がドットなら何も生成せず、次の文字を見る
+		else if (c == '.')
 		{
 			x++;
 		}

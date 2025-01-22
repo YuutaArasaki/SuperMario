@@ -1,8 +1,12 @@
 #pragma once
 #include "BlockBase.h"
+#include "../../Utility/Camera.h"
 
 class Ground : public BlockBase
 {
+private:
+	class Camera* camera;
+
 public:
 	virtual void Initialize() override;
 	virtual void Update(float delta_seconde) override;
@@ -13,5 +17,6 @@ public:
 	virtual const Collision& GetCollision() const override;
 	virtual const unsigned char GetZLayer() const override;
 	virtual const bool GetMobility() const override;
+	void Set_Camera(Camera* c);
 };
 

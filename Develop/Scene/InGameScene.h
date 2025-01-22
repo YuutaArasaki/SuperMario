@@ -11,8 +11,7 @@ private:
 	std::vector<int> Cloudimage;
 	Player* p;
 	int stage_count;
-	int load_line;
-	int load_column;
+	
 
 public:
 	virtual void Initialize() override;
@@ -23,8 +22,8 @@ public:
 	virtual void CheckCollision(GameObject* target, GameObject* partner) override;
 
 private:
-	 void LoadStageMapCSV();		//マップ読み込み処理：引数：map_type = 読み込むマップの種類, x = 読み込みを開始する行
-	 void LoadBackGroundCSV();
+	 void LoadStageMapCSV();
+	 void LoadBackGroundCSV() const;
 	 void DeleteObject();
 };
 
