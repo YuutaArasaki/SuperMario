@@ -30,11 +30,8 @@ private:
 	ePlayerState next_state;
 	float animation_time;
 	int animation_count;
-	int image_change;
 	float g_velocity;
 	bool is_ground;
-	eSide is_VectorX;
-	eSide is_VectorY;
 	float x;
 	bool hit[4];
 	ePlayerState p_state;

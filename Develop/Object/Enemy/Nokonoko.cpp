@@ -47,25 +47,30 @@ void Nokonoko::Initialize()
 
 void Nokonoko::Update(float delta_seconde)
 {
+	if (is_ground == false)
+	{
+		velocity.y = 5;
+	}
+	else
+	{
+		velocity.y = 0;
+	}
 
 	switch (state)
 	{
 	case live:
 		image_offset = 16;
+		is_mobility = true;
 		collision.box_size = Vector2D(32, 32);
 		Movement(delta_seconde);
 		AnimationControl(delta_seconde);
 		break;
 
-	case die:
+	case down:
 		image_offset = 0;
+		is_mobility = false;
 		die_time++;
 		collision.box_size = Vector2D(32, 32);
-
-		if (is_ground == false)
-		{
-			location.y += 16;
-		}
 
 		if (die_time <= 180)
 		{
@@ -76,12 +81,14 @@ void Nokonoko::Update(float delta_seconde)
 			image = die_animation[1];
 		}
 		
-		if (die_time == 300)
+		if (die_time == 1000)
 		{
 			state = live;
 			image = move_animation[0];
 			die_time = 0;
 		}
+
+		is_ground = false;
 
 	}
 }
@@ -114,6 +121,7 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 	target_boxsize = hit_object->GetCollision().box_size;
 	this_boxsize = this->collision.box_size;
 
+	if (state == live)
 
 	//2点間の距離を求める
 	diff = this->location - target_location;
@@ -124,22 +132,38 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 		//自身がHitしたオブジェクトよりも下側にいたとき
 		if (diff.y > 0)
 		{
-			dv.x = (target_location.x + target_boxsize.x / 2) - (this->location.x - this_boxsize.x / 2);
-			dv.y = (target_location.y + target_boxsize.y / 2) - (this->location.y - this_boxsize.y / 2);
+			if (state == down)
+			{
+				dv.x = (target_location.x + target_boxsize.x / 2) - (this->location.x - this_boxsize.x / 2);
+				dv.y = (target_location.y + target_boxsize.y / 2) - (this->location.y - this_boxsize.y / 2);
 
-			if (dv.x > dv.y)
-			{
-				this->location.y += dv.y;
+				if (dv.x > dv.y)
+				{
+					if (state != down)
+					{
+						this->location.y += dv.y;
+					}
+					
+				}
+				else
+				{
+					if (state != down)
+					{
+						this->location.x += dv.x;
+					}
+				}
 			}
-			else
+
+			if (this->state == down)
 			{
-				this->location.x += dv.x;
+				this->velocity.x = 3;
 			}
 
 			if (hit_object->GetCollision().object_type == ePlayer)
 			{
-				state = die;
+				state = down;
 			}
+
 		}
 		else	//自身がHitしたオブジェクトよりも上側にいたとき
 		{
@@ -148,19 +172,27 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 
 			if (dv.x > dv.y)
 			{
-				this->location.y += -dv.y;
+				if (state != down)
+				{
+					this->location.y += -dv.y;
+				}
+				
 				if (hit_object->GetCollision().object_type == eGround)
 				{
 					is_ground = true;
 					g_velocity = 0;
 					velocity.y = 0;
 				}
-
+			
 			}
 			else
 			{
-				this->location.x += dv.x;
+				if (state != down)
+				{
+					this->location.x += dv.x;
+				}
 			}
+			
 		}
 	}
 	else	//自身がHitしたオブジェクトよりも左側にいたとき
@@ -168,22 +200,31 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 		//自身がHitしたオブジェクトよりも下側にいたとき
 		if (diff.y > 0)
 		{
-			dv.x = (this->location.x + this_boxsize.x / 2) - (target_location.x - target_boxsize.x / 2);
-			dv.y = (target_location.y + target_boxsize.y / 2) - (this->location.y - this_boxsize.y / 2);
+			
+				dv.x = (this->location.x + this_boxsize.x / 2) - (target_location.x - target_boxsize.x / 2);
+				dv.y = (target_location.y + target_boxsize.y / 2) - (this->location.y - this_boxsize.y / 2);
 
-			if (dv.x > dv.y)
-			{
-				this->location.y += dv.y;
-			}
-			else
-			{
-				this->location.x += -dv.x;
-			}
+				if (dv.x > dv.y)
+				{
+					if (state != down)
+					{
+						this->location.y += dv.y;
+					}
+				}
+				else
+				{
+					this->location.x += -dv.x;
+				}
 
-			if (hit_object->GetCollision().object_type == ePlayer)
-			{
-				state = die;
-			}
+				if (this->state == down)
+				{
+					this->velocity.x = -3;
+				}
+
+				if (hit_object->GetCollision().object_type == ePlayer)
+				{
+					state = down;
+				}
 		}
 		else	//自身がHitしたオブジェクトよりも上側にいたとき
 		{
@@ -192,7 +233,10 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 
 			if (dv.x > dv.y)
 			{
-				this->location.y += -dv.y;
+				if (state != down)
+				{
+					this->location.y += -dv.y;
+				}
 
 				if (hit_object->GetCollision().object_type == eGround)
 				{
@@ -203,7 +247,10 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 			}
 			else
 			{
-				this->location.x += -dv.x;
+				if (state != down)
+				{
+					this->location.x += -dv.x;
+				}
 			}
 		}
 	}

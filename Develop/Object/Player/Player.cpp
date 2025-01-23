@@ -125,32 +125,6 @@ void Player::Update(float delta_seconde)
 	
 	Movement(delta_seconde);
 
-	/*if (velocity.y > 0)
-	{
-		is_VectorY = DOWN;
-	}
-	else if (velocity.y < 0)
-	{
-		is_VectorY = UP;
-	}
-	else
-	{
-		is_VectorY = NONE;
-	}
-
-	if (velocity.x > 0)
-	{
-		is_VectorX = RIGHT;
-	}
-	else if (velocity.x < 0)
-	{
-		is_VectorX = LEFT;
-	}
-	else
-	{
-		is_VectorX = NONE;
-	}*/
-	
 }
 
 void Player::Draw(const Vector2D& screen_offset) const
