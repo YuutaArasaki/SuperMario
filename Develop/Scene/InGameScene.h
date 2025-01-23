@@ -9,6 +9,10 @@ class InGameScene : public SceneBase
 private:
 	class GameObjectManager* objm;
 	std::vector<int> Cloudimage;
+	int sky_image;
+	int leaf_image[3];
+	int cloud_image[6];
+	int mountain_image[6];
 	Player* p;
 	int stage_count;
 	

@@ -62,6 +62,7 @@ void Player::Update(float delta_seconde)
 	//ePlayerState p_state;
 	slide_flag = false;
 
+	
 	if (next_state != ePlayerState::none)
 	{
 		player_state = PlayerStateFactory::Get((*this), next_state);
@@ -185,6 +186,7 @@ void Player::OnHitCollision(GameObject* hit_object)
 	diff = 0.0f;
 	dv = 0.0f;
 	Vector2D target_location = hit_object->GetLocation();
+	Collision target_collision = hit_object->GetCollision();
 
 	target_boxsize = hit_object->GetCollision().box_size;
 	this_boxsize = this->collision.box_size;
@@ -208,6 +210,11 @@ void Player::OnHitCollision(GameObject* hit_object)
 			{
 				this->location.x += dv.x;
 			}
+
+			if (target_collision.object_type == eBlock)
+			{
+				velocity.y = 0;
+			}
 		}
 		else
 		{
@@ -216,10 +223,10 @@ void Player::OnHitCollision(GameObject* hit_object)
 			
 			if (dv.x > dv.y)
 			{
-				if (hit_object->GetCollision().object_type != eEnemy)
+				if (target_collision.object_type != eEnemy)
 				{
 					this->location.y += -dv.y;
-					if (hit_object->GetCollision().object_type == eGround)
+					if (target_collision.object_type == eGround || target_collision.object_type == eBlock)
 					{
 						is_ground = true;
 						jump_flag = true;
@@ -258,6 +265,11 @@ void Player::OnHitCollision(GameObject* hit_object)
 			{
 				this->location.x += -dv.x;
 			}
+
+			if (target_collision.object_type == eBlock)
+			{
+				velocity.y = 0;
+			}
 		}
 		else
 		{
@@ -266,11 +278,11 @@ void Player::OnHitCollision(GameObject* hit_object)
 
 			if (dv.x > dv.y)
 			{
-				if (hit_object->GetCollision().object_type != eEnemy)
+				if (target_collision.object_type != eEnemy)
 				{
 					this->location.y += -dv.y;
 
-					if (hit_object->GetCollision().object_type == eGround)
+					if (target_collision.object_type == eGround || target_collision.object_type == eBlock)
 					{
 						is_ground = true;
 						jump_flag = true;
