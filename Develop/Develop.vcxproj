@@ -138,6 +138,7 @@
     <ClCompile Include="Object\Blocks\Brick.cpp" />
     <ClCompile Include="Object\Blocks\Question.cpp" />
     <ClCompile Include="Object\BackGround\Sky.cpp" />
+    <ClCompile Include="Object\Blocks\Pipe.cpp" />
     <ClCompile Include="Utility\Camera.cpp" />
     <ClCompile Include="Object\Blocks\Ground.cpp" />
     <ClCompile Include="Object\Character.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Object\Blocks\Brick.h" />
     <ClInclude Include="Object\Blocks\Question.h" />
     <ClInclude Include="Object\BackGround\Sky.h" />
+    <ClInclude Include="Object\Blocks\Pipe.h" />
     <ClInclude Include="Utility\Camera.h" />
     <ClInclude Include="Object\Blocks\Ground.h" />
     <ClInclude Include="Object\Blocks\BlockBase.h" />

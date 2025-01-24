@@ -8,6 +8,7 @@
 #include "../Object/BackGround/Cloud.h"
 #include "../Object/BackGround/Sky.h"
 #include "../Object/Blocks/Question.h"
+#include "../Object/Blocks/Pipe.h"
 #include <fstream>
 
 #define MAX_LOAD_LINE	20;
@@ -126,6 +127,7 @@ void InGameScene::LoadStageMapCSV()
 	Cloud* cloud = nullptr;
 	Kuribo* k = nullptr;
 	Nokonoko* n = nullptr;
+	Pipe* pipe = nullptr;
 
 	// ファイル内の文字を確認していく
 	while (true)
@@ -200,11 +202,27 @@ void InGameScene::LoadStageMapCSV()
 
 			switch (c)
 			{
-			case 't':
+			case '0':
+				pipe = objm->CreateGameObject<Pipe>(generate_location);
+				pipe->Set_Image(0);
 				x++;
 				break;
 
 			case '1':
+				pipe = objm->CreateGameObject<Pipe>(generate_location);
+				pipe->Set_Image(1);
+				x++;
+				break;
+
+			case '2':
+				pipe = objm->CreateGameObject<Pipe>(generate_location);
+				pipe->Set_Image(2);
+				x++;
+				break;
+
+			case '3':
+				pipe = objm->CreateGameObject<Pipe>(generate_location);
+				pipe->Set_Image(3);
 				x++;
 				break;
 			}

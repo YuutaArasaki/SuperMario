@@ -71,12 +71,10 @@ void Nokonoko::Update(float delta_seconde)
 		is_mobility = false;
 		die_time++;
 		collision.box_size = Vector2D(32, 32);
+		image = die_animation[0];
+		Movement(delta_seconde);
 
-		if (die_time <= 180)
-		{
-			image = die_animation[0];
-		}
-		else if (die_time > 180)
+		if (die_time > 800)
 		{
 			image = die_animation[1];
 		}
@@ -102,7 +100,7 @@ void Nokonoko::Draw(const Vector2D& screen_offset) const
 	/*__super::Draw(screen_offset);*/
 	Vector2D graph_location = this->location - screen_offset;
 	DrawRotaGraphF(graph_location.x, graph_location.y - image_offset, 1.0, 0.0, image, TRUE, filp_flag);
-	DrawCircle(location.x, location.y, 5, GetColor(255, 0, 0), 1);
+	DrawFormatString(100, 100, GetColor(255, 0, 0), "Enemy:N %f", velocity.y);
 }
 
 void Nokonoko::Finalize()
@@ -120,8 +118,6 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 
 	target_boxsize = hit_object->GetCollision().box_size;
 	this_boxsize = this->collision.box_size;
-
-	if (state == live)
 
 	//2点間の距離を求める
 	diff = this->location - target_location;
@@ -154,14 +150,17 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 				}
 			}
 
-			if (this->state == down)
-			{
-				this->velocity.x = 3;
-			}
-
 			if (hit_object->GetCollision().object_type == ePlayer)
 			{
-				state = down;
+				if (this->state == down)
+				{
+					this->velocity.x = 3;
+				}
+				else
+				{
+					state = down;
+				}
+				
 			}
 
 		}
@@ -176,13 +175,6 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 				{
 					this->location.y += -dv.y;
 				}
-				
-				if (hit_object->GetCollision().object_type == eGround)
-				{
-					is_ground = true;
-					g_velocity = 0;
-					velocity.y = 0;
-				}
 			
 			}
 			else
@@ -192,7 +184,21 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 					this->location.x += dv.x;
 				}
 			}
-			
+
+			if (hit_object->GetCollision().object_type == ePlayer)
+			{
+				if (this->state == down)
+				{
+					this->velocity.x = 3;
+				}
+			}
+
+			if (hit_object->GetCollision().object_type == eGround)
+			{
+				is_ground = true;
+				g_velocity = 0;
+				this->velocity.y = 0;
+			}
 		}
 	}
 	else	//自身がHitしたオブジェクトよりも左側にいたとき
@@ -216,14 +222,20 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 					this->location.x += -dv.x;
 				}
 
-				if (this->state == down)
-				{
-					this->velocity.x = -3;
-				}
+	
 
 				if (hit_object->GetCollision().object_type == ePlayer)
 				{
-					state = down;
+					if (this->state == down)
+					{
+						this->velocity.x = -3;
+					}
+					else
+					{
+						velocity.x = 0;
+						state = down;
+					}
+					
 				}
 		}
 		else	//自身がHitしたオブジェクトよりも上側にいたとき
@@ -238,18 +250,32 @@ void Nokonoko::OnHitCollision(GameObject* hit_object)
 					this->location.y += -dv.y;
 				}
 
-				if (hit_object->GetCollision().object_type == eGround)
-				{
-					is_ground = true;
-					g_velocity = 0;
-					velocity.y = 0;
-				}
 			}
 			else
 			{
 				if (state != down)
 				{
 					this->location.x += -dv.x;
+				}
+			}
+
+			if (hit_object->GetCollision().object_type == eGround)
+			{
+				is_ground = true;
+				g_velocity = 0;
+				this->velocity.y = 0;
+			}
+
+
+			if (hit_object->GetCollision().object_type == ePlayer)
+			{
+				if (this->state == down)
+				{
+					this->velocity.x = -3;
+				}
+				else
+				{
+					velocity.x = 0;
 				}
 			}
 		}

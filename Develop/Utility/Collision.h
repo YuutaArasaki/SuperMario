@@ -9,6 +9,7 @@ enum eObjectType
 	ePlayer,
 	eEnemy,
 	eBlock,
+	ePipe,
 	eGround,
 	eItem
 };
